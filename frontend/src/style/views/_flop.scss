@@ -1,0 +1,71 @@
+.flop {
+    // position: relative;
+    .table {
+        // margin: 6vw;
+        width: 90vw;
+        height: 38vw;
+        background-color: #003f03;
+        // border: black 4px solid;
+        border-radius: 100vw;
+        box-shadow: inset 0px 0px 0px 0.5vw #000000, inset 0px 0px 0px 1.4vw #2e1010, inset 0px 0px 0px 5.2vw #006104;
+        // box-shadow: 0px 0px 0px 4vw #006104, 0px 0px 0px 4.5vw #420909, 0px 0px 0px 5vw #000000;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .tableImg {
+        width: 84vw;
+        // z-index: -1;
+        margin: 10px 7vw;
+        position: absolute;
+    }
+    .card-table {
+        width: 13vw;
+        height: 18.2vw;
+        // width: 100px;
+        // height: 140px;
+        margin: 9.9vw 0.4vw;
+        border-radius: 1.5vw;
+        // background-color: rgb(189, 15, 15);
+        color: rgb(194, 16, 16);
+        background-color: rgb(250, 250, 250);
+        border: 2px solid black;
+        box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.55);
+        font-size: 1.8rem;
+        display: inline-block;
+        // letter-spacing: -4px;
+
+        p {
+            text-align: left;
+            margin: -4px 0 0 5px;
+            letter-spacing: -4px;
+            &:last-of-type {
+                margin: -14px 0 0 5px;
+                font-size: 2.2rem;
+            }
+        }
+    }
+    .pos1 {
+        position: relative;
+        left: 0.2vw;
+    }
+    .pos2 {
+        position: relative;
+        left: 0.2vw;
+    }
+    .pos3 {
+        position: relative;
+        left: 0.2vw;
+    }
+    .pos4 {
+        position: relative;
+        left: 0.2vw;
+    }
+    .pos5 {
+        position: relative;
+        left: 0.2vw;
+    }
+    .bounce-enter {
+        animation: bounce-in 2.5s;
+    }
+}

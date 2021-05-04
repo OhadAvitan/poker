@@ -1,0 +1,32 @@
+a {
+    &:nth-child(odd) {
+        display: inline-block;
+        border: rgba(255, 255, 255, 0.7) 3px solid;
+        border-radius: 2rem;
+        padding: 10px 22px;
+        font-weight: 700;
+        margin: 10px;
+        font-size: 1.75rem;
+        color: white;
+        text-decoration: none;
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.7);
+            color: rgba(0, 0, 0, 0.7);
+            font-weight: 700;
+        }
+    }
+    // &:nth-child(2){
+    //     background-color: #fff;
+    // }
+}
+
+#nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chipImg {
+    width: 90px;
+    margin: 10px 20px;
+}

@@ -1,0 +1,16 @@
+//--GENERAL--
+@import "./general/typography";
+@import "./general/card";
+@import "./general/variables";
+
+@import "./main";
+
+//--CMPS--
+@import "./cmps/active-tables";
+@import "./cmps/new-table";
+@import "./cmps/app-header";
+
+//--VIEWS--
+@import "./views/home";
+@import "./views/about";
+@import "./views/flop";

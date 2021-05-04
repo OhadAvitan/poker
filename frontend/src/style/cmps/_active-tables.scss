@@ -1,0 +1,59 @@
+.table-list {
+  color: black;
+  margin: auto;
+  max-width: 600px;
+  height: 290px;
+  background-color: whitesmoke;
+  box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  // overflow: hidden;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    border-radius: 5px;
+    width: 10px;
+    &-track {
+      background-color: transparent;
+      border-radius: 5px;
+      width: 15px;
+      margin: 5px;
+    }
+    &-thumb {
+      background-clip: padding-box;
+      border: 2px solid rgba(255, 255, 255, 0.25);
+      // border-right: 5px solid black;
+      // padding: 4px;
+      background-color: rgb(102, 0, 0);
+      border-radius: 2rem;
+    }
+    &-corner {
+      background-color: transparent;
+    }
+    // margin: 2px 0;
+    // background-color: $clr1;
+  }
+
+  .table-preview {
+    display: flex;
+    justify-content: space-between;
+    margin: 2px 0 2px 2px;
+    padding: 0 0 0 5px;
+    border: 2px solid $clr1;
+    border-radius: 8px;
+    button {
+      padding: 10px 20px;
+      margin: 3px;
+      background-color: $clr1;
+      color: whitesmoke;
+      font-weight: 400;
+      border: 0;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+    // &:first-of-type {
+    //   border-radius: 1.8rem 1.8rem 0.2rem 0.2rem;
+    // }
+    // &:last-of-type {
+    //   border-radius: 1.8rem 1.8rem 0.2rem 0.2rem;
+    // }
+  }
+}
