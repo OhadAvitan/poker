@@ -5,6 +5,10 @@ const path = require('path')
 const cookieParser = require('cookie-parser')
 const expressSession = require('express-session')
 
+const tableRoutes = require('./api/table/table.routes')
+const { connectSockets } = require('./services/socket.service')
+const setupAsyncLocalStorage = require('./middlewares/setupAls.middleware')
+
 const app = express()
 const http = require('http').createServer(app)
 
@@ -29,23 +33,20 @@ if (process.env.NODE_ENV === 'production') {
     app.use(cors(corsOptions))
 }
 
-const tableRoutes = require('./api/table/table.routes')
-
-const { connectSockets } = require('./services/socket.service')
 
 
 // routes
-const setupAsyncLocalStorage = require('./middlewares/setupAls.middleware')
 app.all('*', setupAsyncLocalStorage)
 
 app.use('/api/table', tableRoutes)
+// app.use('/api/user', userRoutes)
 
 connectSockets(http, session)
 
 
 const logger = require('./services/logger.service')
 const port = process.env.PORT || 3030
-http.listen(port, () => {
+app.listen(port, () => {
     logger.info('Server is running on port: ' + port)
 })
 

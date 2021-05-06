@@ -40,7 +40,7 @@ export default {
         onCreateTable() {
           if(this.newTableData.owner.length<2) {
             console.log('no name')
-            alert('Your name please YOU SON OF A BITCH')
+            alert('Your name please!')
           }else {
             console.log('On Create Table')
             tableService.setDeckToGame(this.newTableData)

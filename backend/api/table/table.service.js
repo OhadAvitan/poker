@@ -1,7 +1,6 @@
 
 const dbService = require('../../services/db.service')
 // const logger = require('../../services/logger.service')
-const reviewService = require('../review/review.service')
 const ObjectId = require('mongodb').ObjectId
 
 module.exports = {
@@ -12,17 +11,18 @@ module.exports = {
 
 async function insert(table) {
     try {
-        console.log('table:',table);
+        console.log('table: (table.service)',table);
         // peek only updatable fields!
-        // const userToAdd = {
+        // const tableToAdd = {
         //     username: user.username,
         //     password: user.password,
         //     fullname: user.fullname,
         //     score: user.score || 0
         // }
-        // const collection = await dbService.getCollection('user')
-        // await collection.insertOne(userToAdd)
-        return table
+        const collection = await dbService.getCollection('tables')
+        const tableAdded = await collection.insertOne(table)
+        console.log('Table Added:',tableAdded);
+        return tableAdded
     } catch (err) {
         logger.error('cannot insert user', err)
         throw err

@@ -3,7 +3,7 @@
 import { httpService } from './httpService.js';
 import deckService from './deckService.js';
 import playerService from './playerService.js';
-import utilsService from './utilsService.js'
+// import utilsService from './utilsService.js'
 // import playerService from '@/services/playerService.js'
 
 // const card = {id: num: 5 , suit: s}
@@ -34,7 +34,7 @@ export default {
 
 function add(table) {
     console.log('tableService: (ADD)', table)
-    return httpService.post(`table/${table.id}`, table)
+    return httpService.post(`table/`, table)
 }
 
 function getById(tableId) {
@@ -66,7 +66,7 @@ function getEmptyTable() {
 
 
 function setDeckToGame(table) {
-    table.id = 't' + utilsService.getRandomId()
+    // table.id = 't' + utilsService.getRandomId()
     var deck = deckService.getNewDeck()
     table.deck = deck
 
@@ -114,7 +114,7 @@ function prepareFlop(table) {
 
     table = { ...table, flop }
 
-    console.log('table with flop:', table);
+    // console.log('table with flop:', table);
     return table
 }
 

@@ -2,8 +2,9 @@ const tableService = require('./table.service')
 const logger = require('../../services/logger.service')
 
 async function insertTable(req, res) {
+    console.log(req.body);
     try {
-        const table = await tableService.insert(req.params)
+        const table = await tableService.insert(req.body)
         res.send(table)
         console.log('table BackEnd:', table);
     } catch (err) {

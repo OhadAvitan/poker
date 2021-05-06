@@ -29,7 +29,8 @@ async function ajax(endpoint, method = 'get', data = null) {
         const res = await axios({
             url: `${BASE_URL}${endpoint}`,
             method,
-            data
+            data,
+            
         })
         return res.data
     } catch (err) {
