@@ -1,40 +1,41 @@
 <template>
 <div>
-    <section v-show="showModal" class="modal">
+    <section v-show="showSection" class="modal">
         <br/><br/>
         <h1>Welcome!</h1>
         <h2>The first virtual deck online</h2><br/>
         <h2>Lets begin..</h2>
     </section>
-    <section v-show="!showModal" class="content">
+    <section v-show="!showSection" class="content">
         <h2>-Virtual Deck-</h2>
         <div class="game-btns">
             <button @click="onNewTable">New Table</button>
             <button @click="onActiveTables">Active Tables</button>
         </div>
         <new-table v-show="isNewTableShown" />
-        <active-tables v-show="!isNewTableShown" />
-        <button class="go-flop" @click="goFlop">Go Flop</button>
+        <active-tables :tables="tables" v-show="!isNewTableShown"/>
     </section>
-    
 </div>
 </template>
 
 <script>
 import ActiveTables from '@/cmps/ActiveTables'
 import NewTable from '@/cmps/NewTable'
+import tableService from '@/services/tableService.js'
 
 export default {
     data() {
         return {
             tables: null,
             isNewTableShown: true,
-            showModal: true,
+            showSection: true,
             enterFirstTime: true
         };
     },
-    created(){
-        if(this.enterFirstTime) this.fadeOutModal()
+    async created(){
+        this.fadeOutModal()
+        this.tables = await tableService.query();
+        console.log('this.tables:',this.tables);
         
     },
     methods: {
@@ -46,15 +47,14 @@ export default {
             this.isNewTableShown = false
             console.log('On Active Tables');
         },
-        goFlop() {
-            this.$router.push('game')
-        },
         fadeOutModal() {
+            //enterFirstTime gonna be in $store
             if(this.enterFirstTime){
                 setTimeout (()=> {
-                    this.showModal = !this.showModal
-                },0)
-                this.enterFirstTime = false
+                    this.showSection = !this.showSection
+                    this.enterFirstTime = false
+                },200)
+                
             }
         }
     },
@@ -64,3 +64,4 @@ export default {
     },
 };
 </script>
+

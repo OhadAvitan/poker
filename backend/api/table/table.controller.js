@@ -2,14 +2,24 @@ const tableService = require('./table.service')
 const logger = require('../../services/logger.service')
 
 async function insertTable(req, res) {
-    console.log(req.body);
+    // console.log(req.body);
     try {
         const table = await tableService.insert(req.body)
         res.send(table)
-        console.log('table BackEnd:', table);
+        // console.log('table after INSERTED:', table);
     } catch (err) {
         logger.error('Failed to ...', err)
-        res.status(500).send({ err: 'Failed to get user' })
+        res.status(500).send({ err: 'Failed to INSERT table.' })
+    }
+}
+
+async function getTables(req, res) {
+    try {
+        const tables = await tableService.query()
+        res.send(tables)
+    } catch (err) {
+        logger.error('Failed to load tables.', err)
+        res.status(500).send({ err: 'Failed to load tables.' })
     }
 }
 
@@ -25,6 +35,7 @@ async function getTable(req, res) {
 
 module.exports = {
     insertTable,
-    getTable
+    getTable,
+    getTables
 
 }

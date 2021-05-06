@@ -4,14 +4,28 @@ const dbService = require('../../services/db.service')
 const ObjectId = require('mongodb').ObjectId
 
 module.exports = {
-    insert
+    insert,
+    query
 }
 
+async function query() {
+    try {
+        console.log('QUERY: (from table.service):');
 
+        const collection = await dbService.getCollection('tables')
+        // console.log('collection:', collection);
+        var queryObj = await collection.find({}).toArray()
+        // console.log('queryObj:', queryObj);
+        return queryObj
+    } catch (err) {
+        logger.error('cannot INSERT table. (from table.service)', err)
+        throw err
+    }
+}
 
 async function insert(table) {
     try {
-        console.log('table: (table.service)',table);
+        console.log('table (from table.service):', table);
         // peek only updatable fields!
         // const tableToAdd = {
         //     username: user.username,
@@ -20,14 +34,16 @@ async function insert(table) {
         //     score: user.score || 0
         // }
         const collection = await dbService.getCollection('tables')
-        const tableAdded = await collection.insertOne(table)
-        console.log('Table Added:',tableAdded);
-        return tableAdded
+        await collection.insertOne(table)
+        // const tableAdded = 
+        // console.log('table INSERTED:', tableAdded);
+        // return tableAdded
     } catch (err) {
-        logger.error('cannot insert user', err)
+        logger.error('cannot INSERT table. (from table.service)', err)
         throw err
     }
 }
+
 
 
 

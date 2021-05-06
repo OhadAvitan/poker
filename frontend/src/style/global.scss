@@ -1,6 +1,7 @@
 //--GENERAL--
-@import "./general/typography";
 @import "./general/card";
+@import "./general/loader";
+@import "./general/typography";
 @import "./general/variables";
 
 @import "./main";
@@ -9,8 +10,9 @@
 @import "./cmps/active-tables";
 @import "./cmps/new-table";
 @import "./cmps/app-header";
+@import "./cmps/players-names";
 
 //--VIEWS--
 @import "./views/home";
 @import "./views/about";
-@import "./views/flop";
+@import "./views/Game";

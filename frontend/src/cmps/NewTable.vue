@@ -9,7 +9,7 @@
     </section>
     <section>
         <label for="owner">Table owner:</label>
-        <input type="text" name="owner" id="" placeholder="Your name" v-model="newTableData.owner">
+        <input type="text" name="owner" id="" placeholder="Full name" v-model="newTableData.owner">
     </section>
     <section class="radio">
         <label>Mode:</label>
@@ -27,6 +27,7 @@
 import tableService from '@/services/tableService.js'
 
 export default {
+    
     data() {
         return {
             newTableData: {
@@ -37,13 +38,18 @@ export default {
         }
     },
     methods: {
-        onCreateTable() {
+        async onCreateTable() {
           if(this.newTableData.owner.length<2) {
             console.log('no name')
-            alert('Your name please!')
+            alert(`Your name please! I WON'T ASK AGAIN Mother Fu*ker`)
+            // alert(`Your name please! Full name is REQUIRE!`)
           }else {
             console.log('On Create Table')
-            tableService.setDeckToGame(this.newTableData)
+            const table = await tableService.setDeckToGame(this.newTableData)
+            
+            console.log('table',table);
+            const gg = 'gg string'
+            this.$router.push({path: 'game', params: { gg }})
           }
         },
         // tryt() {

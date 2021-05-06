@@ -3,6 +3,7 @@ import Axios from 'axios'
 const BASE_URL = process.env.NODE_ENV === 'production'
     ? '/api/'
     : '//localhost:3030/api/'
+// : '//10.0.0.190:3030/api/'
 
 
 var axios = Axios.create({
@@ -30,7 +31,7 @@ async function ajax(endpoint, method = 'get', data = null) {
             url: `${BASE_URL}${endpoint}`,
             method,
             data,
-            
+
         })
         return res.data
     } catch (err) {

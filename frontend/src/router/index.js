@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Deck from '../views/Deck.vue'
 import Home from '../views/Home.vue'
-import Flop from '../views/Flop.vue'
+import Game from '../views/Game.vue'
 import About from '../views/About.vue'
 
 Vue.use(VueRouter)
@@ -10,7 +10,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    component: Home
+    component: Home,
   },
   {
     path: '/deck',
@@ -23,8 +23,13 @@ const routes = [
   {
     // path: '/game/:id',
     path: '/game',
-    component: Flop
-  }
+    component: Game
+  },
+  // {
+  //   // path: '/game/:id',
+  //   path: '/table',
+  //   component: Home
+  // }
 ]
 
 const router = new VueRouter({

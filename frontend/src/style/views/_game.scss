@@ -1,4 +1,4 @@
-.flop {
+.game {
     // position: relative;
     .table {
         // margin: 6vw;
@@ -64,8 +64,5 @@
     .pos5 {
         position: relative;
         left: 0.2vw;
-    }
-    .bounce-enter {
-        animation: bounce-in 2.5s;
     }
 }

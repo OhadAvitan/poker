@@ -1,21 +1,29 @@
 <template>
-  <div>
+  <div class="active-tables">
     <table-list :tables="tables" />
   </div>
 </template>
 
 <script>
 import TableList from './TableList.vue'
-import tableService from '@/services/tableService.js'
 
 export default {
+  props:['tables'],
   data() {
     return {
-      tables: null,
+      // tables: null,
     };
   },
-  async created() {
-    this.tables = await tableService.createDemoTables();
+  created() {
+    console.log('created');
+    // this.tables = await tableService.query();
+    // console.log('end created', this.tables);
+
+  },
+  methods:{
+    loadTables(){
+      // this.emit('loadTables', JSON.parse(JSON.stringify(this.tables)))
+    }
   },
   components: {
     TableList,

@@ -11,7 +11,7 @@ import playerService from './playerService.js';
 const KEY = 'tables';
 
 export default {
-    // query,
+    query,
     add,
     insert,
     getById,
@@ -23,14 +23,10 @@ export default {
 }
 
 
-// async function query() {
-//     var tables = await dbService.query(KEY);
-//     if (!tables || !tables.length) {
-//         tables = _createDefaultTables();
-//         await dbService.insert(KEY, tables);
-//     }
-//     return tables;
-// }
+async function query() {
+    console.log('tableService: (QUERY) Frontend')
+    return httpService.get(`table/`)
+}
 
 function add(table) {
     console.log('tableService: (ADD)', table)
@@ -66,7 +62,7 @@ function getEmptyTable() {
 
 
 function setDeckToGame(table) {
-    // table.id = 't' + utilsService.getRandomId()
+    //Get a deck
     var deck = deckService.getNewDeck()
     table.deck = deck
 
@@ -85,9 +81,10 @@ function setDeckToGame(table) {
             table.players[j].hand.push(table.deck.shift())
         }
     }
+    //Prepare flop
     const tableReady = prepareFlop(table)
     delete tableReady.deck
-    console.log('table After EVERYTHING:', tableReady);
+    // console.log('table After EVERYTHING:', tableReady);
     add(tableReady)
     //send to the backend and then to the database
 }
