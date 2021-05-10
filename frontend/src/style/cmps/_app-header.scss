@@ -1,17 +1,22 @@
 a {
+    // opacity: 0.8;
+    // background-image: radial-gradient(#6a0d00 1px, transparent 1px), radial-gradient(#6a0d00 1px, #4b0000 1px);
+    // background-size: 40px 40px;
+    // background-position: 0 0, 20px 20px;
     &:nth-child(odd) {
+        background-color: #550000;
         display: inline-block;
-        border: rgba(255, 255, 255, 0.7) 3px solid;
+        border: rgba(255, 255, 255, 0.75) 3px solid;
         border-radius: 2rem;
-        padding: 10px 22px;
-        font-weight: 700;
+        padding: 6px 22px;
+        // font-weight: 700;
         margin: 10px;
         font-size: 1.75rem;
         color: white;
         text-decoration: none;
         &:hover {
-            background-color: rgba(255, 255, 255, 0.7);
-            color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(255, 255, 255, 0.6);
+            color: rgb(65, 0, 0);
             font-weight: 700;
         }
     }
@@ -27,6 +32,6 @@ a {
 }
 
 .chipImg {
-    width: 90px;
+    width: 75px;
     margin: 10px 20px;
 }

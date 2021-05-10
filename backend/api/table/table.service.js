@@ -25,19 +25,20 @@ async function query() {
 
 async function insert(table) {
     try {
-        console.log('table (from table.service):', table);
+        console.log('table.service table before:', table);
         // peek only updatable fields!
         // const tableToAdd = {
-        //     username: user.username,
-        //     password: user.password,
-        //     fullname: user.fullname,
-        //     score: user.score || 0
-        // }
-        const collection = await dbService.getCollection('tables')
-        await collection.insertOne(table)
+            //     username: user.username,
+            //     password: user.password,
+            //     fullname: user.fullname,
+            //     score: user.score || 0
+            // }
+            const collection = await dbService.getCollection('tables')
+            await collection.insertOne(table)
+            console.log('table.service table after:', table);
         // const tableAdded = 
         // console.log('table INSERTED:', tableAdded);
-        // return tableAdded
+        return table
     } catch (err) {
         logger.error('cannot INSERT table. (from table.service)', err)
         throw err

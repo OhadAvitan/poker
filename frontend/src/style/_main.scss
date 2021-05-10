@@ -3,6 +3,11 @@
 }
 
 body {
+  background-color: #700505;
+  opacity: 1;
+  background-image: radial-gradient(#a31400 0.75px, transparent 0.75px), radial-gradient(#a31400 0.75px, #700505 0.75px);
+  background-size: 30px 30px;
+  background-position: 0 0, 15px 15px;
   // ::selection {
   //     color: #155800;
   //     background: rgb(255, 255, 255);
@@ -25,13 +30,13 @@ body {
 }
 
 h1 {
-  color: rgba(255, 255, 255, 0.9);
+  color: whitesmoke;
   font-size: 4rem;
   margin: 10px;
 }
 
 h2 {
-  color: rgba(255, 255, 255, 0.9);
+  color: white;
   margin: 10px;
   font-size: 3rem;
   font-weight: 700;

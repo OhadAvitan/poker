@@ -1,7 +1,7 @@
 <template>
-<section class="game">
+<section class="table">
   <section>
-    <players-names />
+    <seats-form />
   </section>
   <section>
     <div class="table"></div>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import PlayersNames from '../cmps/PlayersNames.vue';
+import SeatsForm from '../cmps/SeatsForm.vue';
 export default {
   props: ['gg'],
     // action: ['open flop','open turn','open river'],
@@ -35,14 +35,14 @@ export default {
   methods: {
     getTableFromParams(){
       // return this.tableFromParams = this.$route.params.table
-      console.log('created');
+      console.log('createdssssssssssssssssss');
       // const tt = this.$route.params
       // console.log(tt);
       return true
     }
   },
   components: {
-    PlayersNames
+    SeatsForm
   }
 }
 </script>

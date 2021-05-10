@@ -47,9 +47,9 @@ export default {
             console.log('On Create Table')
             const table = await tableService.setDeckToGame(this.newTableData)
             
-            console.log('table',table);
-            const gg = 'gg string'
-            this.$router.push({path: 'game', params: { gg }})
+            console.log('tableGG',table);
+            // const gg = 'gg string'
+            this.$router.push({path: 'table', params:  table })
           }
         },
         // tryt() {

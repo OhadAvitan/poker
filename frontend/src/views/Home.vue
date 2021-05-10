@@ -41,11 +41,9 @@ export default {
     methods: {
         onNewTable() {
             this.isNewTableShown = true
-            console.log('On New Table');
         },
         onActiveTables() {
             this.isNewTableShown = false
-            console.log('On Active Tables');
         },
         fadeOutModal() {
             //enterFirstTime gonna be in $store

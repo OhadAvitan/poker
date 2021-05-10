@@ -12,7 +12,7 @@
 export default {
   data() {
     return {
-      img: require('@/assets/imgs/chip.png'),
+      img: require('@/assets/imgs/chip5.png'),
     };
   },
 };

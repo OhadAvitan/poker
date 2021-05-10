@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Deck from '../views/Deck.vue'
 import Home from '../views/Home.vue'
-import Game from '../views/Game.vue'
+import Table from '../views/Table.vue'
 import About from '../views/About.vue'
 
 Vue.use(VueRouter)
@@ -21,12 +21,12 @@ const routes = [
     component: About
   },
   {
-    // path: '/game/:id',
-    path: '/game',
-    component: Game
+    // path: '/table/:id',
+    path: '/table',
+    component: Table
   },
   // {
-  //   // path: '/game/:id',
+  //   // path: '/table/:id',
   //   path: '/table',
   //   component: Home
   // }

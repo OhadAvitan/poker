@@ -85,7 +85,9 @@ function setDeckToGame(table) {
     const tableReady = prepareFlop(table)
     delete tableReady.deck
     // console.log('table After EVERYTHING:', tableReady);
-    add(tableReady)
+    
+    const aaa = add(tableReady);
+    console.log('bbbbbbbbbbbbbbbbbbbbbbbb',aaa);
     //send to the backend and then to the database
 }
 

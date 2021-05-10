@@ -15,7 +15,7 @@ export default {
     };
   },
   created() {
-    console.log('created');
+    // console.log('created');
     // this.tables = await tableService.query();
     // console.log('end created', this.tables);
 

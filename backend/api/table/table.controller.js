@@ -2,10 +2,14 @@ const tableService = require('./table.service')
 const logger = require('../../services/logger.service')
 
 async function insertTable(req, res) {
-    // console.log(req.body);
+    console.log('table.controller rep.body:',req.body);
     try {
+        console.log('table.controller',req.body)
         const table = await tableService.insert(req.body)
+        console.log('table.controller after serviceeeeeee:',table)
+        // console.log('table.controller after serviceeeeeee333333:',res.send(table))
         res.send(table)
+        // res.send('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
         // console.log('table after INSERTED:', table);
     } catch (err) {
         logger.error('Failed to ...', err)
