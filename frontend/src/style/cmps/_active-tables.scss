@@ -3,7 +3,7 @@
 
   .table-list {
     color: black;
-    margin: auto;
+    margin: 10px auto;
     max-width: 600px;
     height: 290px;
     background-color: whitesmoke;
@@ -38,9 +38,9 @@
     .table-preview {
       display: flex;
       justify-content: space-between;
-      margin: 2px 2px 2px 2px;
+      margin: 2px;
       padding: 0 0 0 5px;
-      border: 2px solid $clr1;
+      border: 3px solid $clr1;
       border-radius: 8px;
       button {
         padding: 10px 20px;

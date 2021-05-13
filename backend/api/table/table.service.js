@@ -1,11 +1,16 @@
-
-const dbService = require('../../services/db.service')
-// const logger = require('../../services/logger.service')
 const ObjectId = require('mongodb').ObjectId
+
+// const logger = require('../../services/logger.service')
+const dbService = require('../../services/db.service.js')
+const playerService = require('../../services/player.service.js')
+const deckService = require('../../services/deck.service.js')
+
 
 module.exports = {
     insert,
-    query
+    query,
+    getById,
+    setDeckToGame
 }
 
 async function query() {
@@ -14,11 +19,22 @@ async function query() {
 
         const collection = await dbService.getCollection('tables')
         // console.log('collection:', collection);
-        var queryObj = await collection.find({}).toArray()
-        // console.log('queryObj:', queryObj);
-        return queryObj
+        var tablesQuery = await collection.find({}).toArray()
+        // console.log('tablesQuery:', tablesQuery);
+        return tablesQuery
     } catch (err) {
         logger.error('cannot INSERT table. (from table.service)', err)
+        throw err
+    }
+}
+
+async function getById(tableId) {
+    try {
+        const collection = await dbService.getCollection('tables')
+        const table = await collection.findOne({ '_id': ObjectId(tableId) })
+        return table
+    } catch (err) {
+        logger.error(`while finding table ${tableId}`, err)
         throw err
     }
 }
@@ -26,24 +42,116 @@ async function query() {
 async function insert(table) {
     try {
         console.log('table.service table before:', table);
-        // peek only updatable fields!
-        // const tableToAdd = {
-            //     username: user.username,
-            //     password: user.password,
-            //     fullname: user.fullname,
-            //     score: user.score || 0
-            // }
-            const collection = await dbService.getCollection('tables')
-            await collection.insertOne(table)
-            console.log('table.service table after:', table);
-        // const tableAdded = 
+
+        const tableForDB = setDeckToGame(table)
+        console.log('tableForDBBBBBBBBBBBBBBBBBbbb', tableForDB);
+        const collection = await dbService.getCollection('tables')
+        await collection.insertOne(tableForDB)
+
+        const collectionTR = await dbService.getCollection('tables-rounds')
+        await collectionTR.insertOne(tableForDB)
+
+        console.log('table.service table after:', tableForDB)
         // console.log('table INSERTED:', tableAdded);
-        return table
+        return tableForDB
     } catch (err) {
         logger.error('cannot INSERT table. (from table.service)', err)
         throw err
     }
 }
+
+
+
+function setDeckToGame(table) {
+    //Get a deck
+    var deck = deckService.getNewDeck()
+    table.deck = deck
+
+    //create a players array
+    var players = new Array(table.numOfPlayers)
+    delete table.numOfPlayers
+    for (let i = 0; i < players.length; i++) {
+        players[i] = playerService.newPlayer();
+    }
+    table = { ...table, players }
+
+    //Deal Deck
+    dealDeck(table)
+
+    //Prepare flop
+    const tableReady = prepareFlop(table)
+    delete tableReady.deck
+    // console.log('table After EVERYTHING:', tableReady);
+
+    // await (tableReady);
+    // const tableAdded = await add(tableReady)
+    // console.log('tableAdded:', tableAdded);
+    console.log('tableReadyyyyyyyyyyyyyyyyyyyy', tableReady);
+    return tableReady
+    //send to the backend and then to the database
+}
+
+function dealDeck(table) {
+    const loops = table.mode === 'poker' ? 2 : 4;
+    for (let i = 0; i < loops; i++) {
+        for (let j = 0; j < table.players.length; j++) {
+            table.players[j].hand.push(table.deck.shift())
+        }
+    }
+
+}
+
+function prepareFlop(table) {
+
+    const flop = []
+    //Burn first card
+    table.deck.shift()
+    //Add 3 cards to flop
+    flop.push(table.deck.shift())
+    flop.push(table.deck.shift())
+    flop.push(table.deck.shift())
+
+    //Burn second card
+    table.deck.shift();
+    //Add 4th card
+    flop.push(table.deck.shift())
+
+    //Burn third card
+    table.deck.shift();
+    //Add 5th card
+    flop.push(table.deck.shift())
+
+    table = { ...table, flop }
+
+    return table
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

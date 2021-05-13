@@ -22,7 +22,7 @@ const routes = [
   },
   {
     // path: '/table/:id',
-    path: '/table',
+    path: '/table/:_id',
     component: Table
   },
   // {

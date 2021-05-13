@@ -25,6 +25,7 @@
 
 <script>
 import tableService from '@/services/tableService.js'
+// const ObjectId = require('mongodb').ObjectId
 
 export default {
     
@@ -39,17 +40,18 @@ export default {
     },
     methods: {
         async onCreateTable() {
-          if(this.newTableData.owner.length<2) {
-            console.log('no name')
-            alert(`Your name please! I WON'T ASK AGAIN Mother Fu*ker`)
-            // alert(`Your name please! Full name is REQUIRE!`)
-          }else {
+          if(this.newTableData.owner.length<2) { alert(`Your name please! Full name is REQUIRE!`) } 
+          else {
             console.log('On Create Table')
-            const table = await tableService.setDeckToGame(this.newTableData)
+            const table = await tableService.add(this.newTableData)
             
-            console.log('tableGG',table);
-            // const gg = 'gg string'
-            this.$router.push({path: 'table', params:  table })
+            // const table = await tableService.setDeckToGame(this.newTableData)
+
+            console.log('table returns from DB', table)
+            console.log('table ID', table._id)
+
+            // this.$router.push({path: 'table', params: {tableTrans: table}})
+            this.$router.push(`/table/${table._id}`)
           }
         },
         // tryt() {

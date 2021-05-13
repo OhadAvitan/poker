@@ -10,7 +10,7 @@
     height: 290px;
 
     background-color: whitesmoke;
-    box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.6), inset 0px 0px 0px 2px white, inset 0px 0px 0px 4px $clr1;
+    box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.6), inset 0px 0px 0px 2px white, inset 0px 0px 0px 5px $clr1;
 
     // box-shadow: inset 0px 0px 0px 0.5vw #000000, inset 0px 0px 0px 1.4vw #2e1010, inset 0px 0px 0px 5.2vw #006104;
     border-radius: 10px;
@@ -42,6 +42,7 @@
         border: 0;
         padding: 8px 40px;
         border-radius: 0.3rem;
+        cursor: pointer;
     }
     .radio {
         input {

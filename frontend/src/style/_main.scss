@@ -5,9 +5,10 @@
 body {
   background-color: #700505;
   opacity: 1;
-  background-image: radial-gradient(#a31400 0.75px, transparent 0.75px), radial-gradient(#a31400 0.75px, #700505 0.75px);
-  background-size: 30px 30px;
-  background-position: 0 0, 15px 15px;
+  background-image: radial-gradient(#a31400 0.6px, transparent 0.6px), radial-gradient(#a31400 0.6px, #700505 0.6px);
+  background-size: 24px 24px;
+  background-position: 0 0, 12px 12px;
+
   // ::selection {
   //     color: #155800;
   //     background: rgb(255, 255, 255);

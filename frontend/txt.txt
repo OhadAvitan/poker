@@ -17,3 +17,6 @@ charCodeAt('♣') = 9827
 charCodeAt('♦') = 9830
 charCodeAt('♥') = 9829
 charCodeAt('♠') = 9824
+
+
+--host 0.0.0.0 --disable-host-c

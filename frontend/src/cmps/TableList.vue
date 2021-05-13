@@ -5,7 +5,7 @@
             <p>Owner: {{ table.owner }}</p>
             <p>Players: {{ table.players.length }}</p>
             <p>Mode: {{ table.mode }}</p>
-            <button>JOIN</button>
+            <button @click="joinTable(table._id)">JOIN</button>
         </div>
     </div>
 </div>
@@ -13,6 +13,11 @@
 
 <script>
 export default {
-    props: ['tables']
+    props: ['tables'],
+    methods: {
+        joinTable(tableId) {
+            this.$router.push(`/table/${tableId}`)
+        }
+    }
 };
 </script>

@@ -1,19 +1,20 @@
 'use strict';
 
-import utilsService from './utilsService.js'
+const utilsService = require('./utils.service.js')
 
-export default {
-    newPlayer
-}
+
 
 function newPlayer() {
     return {
         id: 'p' + utilsService.getRandomId(),
-        name: null,
+        name: '',
         hand: []
     }
 }
 
+module.exports = {
+    newPlayer
+}
 // function newPlayer(name) {
 //     return {
 //         id: utilsService.getRandomId(),

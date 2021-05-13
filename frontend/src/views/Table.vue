@@ -1,7 +1,7 @@
 <template>
 <section class="table">
   <section>
-    <seats-form />
+    <seats-form :tableId="tableId" />
   </section>
   <section>
     <div class="table"></div>
@@ -12,7 +12,7 @@
         <div class="card-table pos4"></div>
         <div class="card-table pos5"></div>
       </div>
-      <p>{{gg}}</p>
+      <p>{{tableTrans}}</p>
   </section>
   
 </section>
@@ -20,26 +20,36 @@
 
 <script>
 import SeatsForm from '../cmps/SeatsForm.vue';
+import tableService from '@/services/tableService.js'
+
 export default {
-  props: ['gg'],
+  props: ['tableTrans'],
     // action: ['open flop','open turn','open river'],
   data() {
     return {
       imgSrc: require('@/assets/imgs/table.png'),
-      tableFromParams: null,
+      tableId: null
+      // tableFromParams: null,
     }
   },
   created(){
-    this.getTableFromParams()
+    // this.getTableFromParams()
+    // console.log(this.tableTrans);
+    // console.log(this.$route.params._id);
+    this.tableId = this.$route.params._id
   },
   methods: {
-    getTableFromParams(){
-      // return this.tableFromParams = this.$route.params.table
-      console.log('createdssssssssssssssssss');
-      // const tt = this.$route.params
-      // console.log(tt);
-      return true
-    }
+    getTable() {
+      var table = tableService.getTable();
+      console.log('table from service (Table)', table);
+    },
+    // getTableFromParams(){
+    //   // return this.tableFromParams = this.$route.params.table
+    //   console.log('createdssssssssssssssssss');
+    //   // const tt = this.$route.params
+    //   // console.log(tt);
+    //   return true
+    // }
   },
   components: {
     SeatsForm

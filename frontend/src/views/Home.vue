@@ -4,7 +4,7 @@
         <br/><br/>
         <h1>Welcome!</h1>
         <h2>The first virtual deck online</h2><br/>
-        <h2>Lets begin..</h2>
+        <h2>Let's begin..</h2>
     </section>
     <section v-show="!showSection" class="content">
         <h2>-Virtual Deck-</h2>
@@ -19,6 +19,7 @@
 </template>
 
 <script>
+
 import ActiveTables from '@/cmps/ActiveTables'
 import NewTable from '@/cmps/NewTable'
 import tableService from '@/services/tableService.js'
@@ -34,11 +35,15 @@ export default {
     },
     async created(){
         this.fadeOutModal()
+        this.goFullscreen()
         this.tables = await tableService.query();
         console.log('this.tables:',this.tables);
         
     },
     methods: {
+        goFullscreen(){
+            // document.documentElement.webkitRequestFullscreen()
+        },
         onNewTable() {
             this.isNewTableShown = true
         },

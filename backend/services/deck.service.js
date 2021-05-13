@@ -1,9 +1,5 @@
 'use strict'
 
-export default {
-    getNewDeck
-}
-
 // const card = {id: num: 5 , suit: s}
 
 function getNewDeck() {
@@ -43,4 +39,8 @@ function createDeck() {
 function createCard(id, num, suit) {
     const card = { id, num, suit };
     return card;
+}
+
+module.exports = {
+    getNewDeck
 }

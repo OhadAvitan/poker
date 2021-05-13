@@ -1,5 +1,6 @@
 <template>
   <section class="warpper">
+    <p>Nothing to see here</p>
     <div class="card" v-for="card in deck" :key="card.id">
       <div :style="'color: ' + cardColor(card)" class="card-wrap">
         <p>{{ card.num }}</p>
@@ -11,7 +12,7 @@
 </template>
 
 <script>
-import deckService from "@/services/deckService.js";
+// import deckService from "@/services/deckService.js";
 export default {
   data() {
     return {
@@ -19,7 +20,7 @@ export default {
     };
   },
   async created() {
-    this.deck = await deckService.getNewDeck()
+    // this.deck = await deckService.getNewDeck()
   },
   methods: {
     cardColor(card) {
