@@ -1,20 +1,12 @@
 <template>
     <div class="seats-form">
         <p>Seats Form</p>
-        <p>table ID: {{tableId}}</p>
-    <!-- <div class="gg" v-for="props.table.player in table.players" :key="table.player">
-        <label>player {{n}}:</label>
-        <input type="text"> -->
-    <!-- </div>
-    <p>{{playersNames}}</p> -->
-    <div v-for="(players, index) in players" :key="players[index].id" class="player-name-section">
-        <p>{{index}}</p>
-        <!-- <label for="player">Player name:</label> -->
-        <!-- <input type="text" name="player" id="" placeholder="Player name" v-model="table.players[index].name"> -->
-    </div>
-    <!-- <div v-for="player in table.players" :key="player.id">
-        <p>{{player.id}}</p>
-    </div> -->
+        <!-- <p>table ID: {{tableId}}</p> -->
+        <div v-for="(player, index) in players" :key="players[index].id" class="player-name-section">
+            <label :for="index">Player {{index+1}} name:</label>
+            <input type="text" name="player" :id="index" :placeholder="`player `+(index+1)+` name`" v-model="table.players[index].name">
+        </div>
+        <button @click="onSetSeats">Set Players</button>
     </div>
 </template>
 
@@ -26,7 +18,6 @@ export default {
     props:['tableId'],
     data() {
         return {
-            // table: this.$route.params.table
             table: null,
             players: null
         }
@@ -35,6 +26,11 @@ export default {
         // console.log('IIIIIIIIIIII',this.table);
         console.log('****SeatsForm****');
         this.propsToData()
+        // setTimeout (()=> {
+        //             this.propsToData()
+        //             console.log('timeout');
+        //         },6000)
+        
     },
     computed: {
         
@@ -47,7 +43,14 @@ export default {
             this.table = tableFromDB
             this.players = tableFromDB.players
         },
-        createNamesObj() {
+        async onSetSeats() {
+            // console.log(this.players);
+            console.log(this.table.players);
+            const table = JSON.parse(JSON.stringify(this.table))
+            console.log('table (SeatsForm)', table);
+            const tableAfterUpdate = await tableService.update(table)
+            console.log(tableAfterUpdate);
+            this.$emit('seatsAreSet',tableAfterUpdate)
 
         }
     }

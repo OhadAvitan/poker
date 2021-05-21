@@ -6,14 +6,14 @@ import { httpService } from './httpService.js';
 
 // const card = {id: num: 5 , suit: s}
 
-const KEY = 'tables';
-
 export default {
     query,
     add,
+    update,
     getById,
-    remove,
-    save
+    // join
+    //     remove,
+    //     save
 }
 
 
@@ -23,22 +23,30 @@ async function query() {
 
 function add(table) {
     console.log('tableService: (ADD)', table)
-    const tt = { ...table }
+    // const tableSpread = { ...table }
     // console.log('tableService: (tt)', table)
-    return httpService.post(`table/`, tt)
+    return httpService.post(`table/`, table)
 }
 
 function getById(tableId) {
     return httpService.get(`table/${tableId}`)
 }
 
+function update(table) {
+    return httpService.put(`table/${table._id}`, table)
+}
+
+// function join(tableId) {
+//     return httpService.put(`table/${table._id}`, ta)
+// }
+
 /////////////////////////////
 
-function save(table) {
-    if (table._id) return httpService.put(KEY, table);
-    else return httpService.post(KEY, table)
-}
+// function save(table) {
+//     if (table._id) return httpService.put(KEY, table);
+//     else return httpService.post(KEY, table)
+// }
 
-function remove(id) {
-    return httpService.delete(KEY, id);
-}
+// function remove(id) {
+//     return httpService.delete(KEY, id);
+// }

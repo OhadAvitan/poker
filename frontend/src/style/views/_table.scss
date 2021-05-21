@@ -1,4 +1,4 @@
-.table {
+.table-view {
     // position: relative;
     .table {
         // margin: 6vw;
@@ -19,7 +19,13 @@
         margin: 10px 7vw;
         position: absolute;
     }
+    .action-btn {
+        padding: 10px 20px;
+        margin: 10px;
+        font-size: 1.7rem;
+    }
     .card-table {
+        font-family: Kanit300;
         width: 13vw;
         height: 18.2vw;
         // width: 100px;
@@ -31,18 +37,24 @@
         background-color: rgb(250, 250, 250);
         border: 2px solid black;
         box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.55);
-        font-size: 1.8rem;
+        font-size: 5.6vw;
         display: inline-block;
         // letter-spacing: -4px;
 
         p {
+            position: absolute;
             text-align: left;
-            margin: -4px 0 0 5px;
+            margin: -1.3vw 0 0 0.5vw;
             letter-spacing: -4px;
             &:last-of-type {
-                margin: -14px 0 0 5px;
-                font-size: 2.2rem;
+                margin: 2.8vw 0 0 0.8vw;
+                font-size: 5.3vw;
             }
+        }
+        h3 {
+            position: absolute;
+            margin: 2.7vw 0 0 4.2vw;
+            font-size: 13vw;
         }
     }
     .pos1 {

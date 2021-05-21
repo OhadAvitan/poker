@@ -1,58 +1,112 @@
 <template>
-<section class="table">
-  <section>
-    <seats-form :tableId="tableId" />
-  </section>
-  <section>
-    <div class="table"></div>
+  <section class="table-view">
+    <section v-show="!isPlayersSet">
+      <h2>Wait for the players to join</h2>
+      <h3>Players inside:{{ users.length }}</h3>
+      <seats-form :tableId="tableId" @seatsAreSet="seatsAreSet" />
+    </section>
+    <section v-show="isPlayersSet">
+      <div class="table"></div>
       <div class="cards">
-        <div class="card-table pos1"></div>
-        <div class="card-table pos2"></div>
-        <div class="card-table pos3"></div>
-        <div class="card-table pos4"></div>
-        <div class="card-table pos5"></div>
+        <div
+          v-for="(card, index) in flop"
+          :key="card.id"
+          :style="'color: ' + cardColor(card)"
+          :class="`card-table pos` + (index + 1)"
+        >
+          <div :hidden="!card.isShown">
+            <p>{{ card.num }}</p>
+            <p>{{ card.suit }}</p>
+            <h3>{{ card.suit }}</h3>
+          </div>
+        </div>
       </div>
-      <p>{{tableTrans}}</p>
+      <button class="action-btn" @click="tableActions(indexAction)">
+        {{ action }}
+      </button>
+    </section>
   </section>
-  
-</section>
 </template>
 
 <script>
-import SeatsForm from '../cmps/SeatsForm.vue';
-import tableService from '@/services/tableService.js'
+import SeatsForm from "../cmps/SeatsForm.vue";
+import tableService from "@/services/tableService.js";
 
 export default {
-  props: ['tableTrans'],
-    // action: ['open flop','open turn','open river'],
+  // action: ['open flop','open turn','open river'],
   data() {
     return {
-      imgSrc: require('@/assets/imgs/table.png'),
-      tableId: null
+      imgSrc: require("@/assets/imgs/table.png"),
+      tableId: null,
+      table: null,
+      flop: null,
+      isPlayersSet: false,
+      indexAction: 2,
+      action: this.tableActions(this.indexAction),
       // tableFromParams: null,
-    }
+    };
   },
-  created(){
+  created() {
     // this.getTableFromParams()
     // console.log(this.tableTrans);
     // console.log(this.$route.params._id);
-    this.tableId = this.$route.params._id
+    this.tableId = this.$route.params._id;
+    this.action = "open flop";
   },
   methods: {
-    getTable() {
-      var table = tableService.getTable();
-      console.log('table from service (Table)', table);
+    getTableFromDB() {
+      const table = tableService.getTable(this.tableId);
+      console.log("table from service (Table)", table);
     },
-    // getTableFromParams(){
-    //   // return this.tableFromParams = this.$route.params.table
-    //   console.log('createdssssssssssssssssss');
-    //   // const tt = this.$route.params
-    //   // console.log(tt);
-    //   return true
-    // }
+    seatsAreSet(table) {
+      this.table = table;
+      this.flop = this.table.flop;
+      this.isPlayersSet = true;
+    },
+    cardColor(card) {
+      if (card.suit === "♠" || card.suit === "♣") {
+        return "black";
+      } else return "rgb(194, 16, 16)";
+    },
+    tableActions(index) {
+      switch (index) {
+        case 1:
+          console.log("New round and change to open flop");
+          this.action = "Open flop";
+          break;
+        case 2:
+          console.log("open flop and change to open turn");
+          this.visibleFlop();
+          this.action = "Open turn";
+          break;
+        case 3:
+          console.log("open turn and change to open river");
+          this.visibleTurn();
+          this.action = "Open river";
+          break;
+        case 4:
+          console.log("open river and change to New round");
+          this.visibleRiver();
+          this.action = "New round";
+          this.indexAction = 0;
+          break;
+      }
+      this.indexAction++;
+    },
+    visibleFlop() {
+      this.flop[0].isShown = !this.flop[0].isShown;
+      this.flop[1].isShown = !this.flop[1].isShown;
+      this.flop[2].isShown = !this.flop[2].isShown;
+    },
+    visibleTurn() {
+      this.flop[3].isShown = !this.flop[3].isShown;
+    },
+    visibleRiver() {
+      this.flop[4].isShown = !this.flop[4].isShown;
+    },
   },
   components: {
-    SeatsForm
-  }
-}
+    SeatsForm,
+  },
+};
 </script>

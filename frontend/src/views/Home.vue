@@ -27,7 +27,7 @@ import tableService from '@/services/tableService.js'
 export default {
     data() {
         return {
-            tables: null,
+            tables: [],
             isNewTableShown: true,
             showSection: true,
             enterFirstTime: true
@@ -36,7 +36,7 @@ export default {
     async created(){
         this.fadeOutModal()
         this.goFullscreen()
-        this.tables = await tableService.query();
+        this.tables = await tableService.query(); 
         console.log('this.tables:',this.tables);
         
     },

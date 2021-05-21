@@ -1,18 +1,21 @@
+@import "./main";
+
 //--GENERAL--
 @import "./general/card";
 @import "./general/loader";
 @import "./general/typography";
 @import "./general/variables";
 
-@import "./main";
-
 //--CMPS--
-@import "./cmps/active-tables";
-@import "./cmps/new-table";
 @import "./cmps/app-header";
+@import "./cmps/new-table";
+@import "./cmps/active-tables";
 @import "./cmps/seats-form";
 
 //--VIEWS--
 @import "./views/home";
 @import "./views/about";
 @import "./views/table";
+@import "./views/hand";
+@import "./views/signup";
+@import "./views/login";

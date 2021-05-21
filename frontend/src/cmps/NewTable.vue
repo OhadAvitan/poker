@@ -28,7 +28,6 @@ import tableService from '@/services/tableService.js'
 // const ObjectId = require('mongodb').ObjectId
 
 export default {
-    
     data() {
         return {
             newTableData: {

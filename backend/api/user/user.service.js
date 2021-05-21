@@ -1,10 +1,10 @@
-
 const dbService = require('../../services/db.service')
 // const logger = require('../../services/logger.service')
 const reviewService = require('../review/review.service')
 const ObjectId = require('mongodb').ObjectId
 
 module.exports = {
+    insert,
     query,
     getById,
     getByUsername,
@@ -12,6 +12,40 @@ module.exports = {
     update,
     add
 }
+
+async function insert(user) {
+    try {
+        console.log('userrrrrrrrrrrrrrrr', user);
+        const collection = await dbService.getCollection('users')
+
+        //Checks if exist
+        const isExsit = await collection.find({ 'phoneNumber': user.phoneNumber }).count() === 1 ? true : false
+        if (isExsit) return false
+        // if (isExsit) return alert('User already Exist..heading to login page')
+
+        //Insert if not exist
+        await collection.insertOne(user)
+        return user
+    } catch (err) {
+        logger.error(`while inserting user ${username}`, err)
+        throw err
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 async function query(filterBy = {}) {
     const criteria = _buildCriteria(filterBy)
@@ -51,6 +85,7 @@ async function getById(userId) {
         throw err
     }
 }
+
 async function getByUsername(username) {
     try {
         const collection = await dbService.getCollection('user')

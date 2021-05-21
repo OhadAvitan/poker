@@ -5,12 +5,12 @@ const dbService = require('../../services/db.service.js')
 const playerService = require('../../services/player.service.js')
 const deckService = require('../../services/deck.service.js')
 
-
 module.exports = {
-    insert,
     query,
+    insert,
+    update,
     getById,
-    setDeckToGame
+    // setNewTable
 }
 
 async function query() {
@@ -28,6 +28,47 @@ async function query() {
     }
 }
 
+async function insert(table) {
+    try {
+        console.log('table.service table before:', table);
+
+        const tableForDB = setNewTable(table)
+        // console.log('tableForDBBBBBBBBBBBBBBBBBbbb', tableForDB);
+        const collection = await dbService.getCollection('tables')
+        await collection.insertOne(tableForDB)
+
+        const collectionTR = await dbService.getCollection('tables-rounds')
+        var tableRounds = { _id: tableForDB._id }
+        tableRounds.rounds = []
+        console.log(tableRounds);
+        await collectionTR.insertOne(tableRounds)
+
+        // console.log('table.service table after:', tableForDB)
+        // console.log('table INSERTED:', tableAdded);
+        return tableForDB
+    } catch (err) {
+        logger.error('cannot INSERT table. (from table.service)', err)
+        throw err
+    }
+}
+
+async function update(tempTable) {
+    try {
+        const table = JSON.parse(JSON.stringify(tempTable))
+        table._id = ObjectId(table._id)
+        // console.log('table._id', table._id);
+        // console.log('TABLEEEEEEEEEEEEEE', table);
+        console.log('IM 222222222222222222222');
+        const collection = await dbService.getCollection('tables')
+        await collection.updateOne({ '_id': table._id }, { $set: table })
+        console.log('IM 3333333333333333333');
+        return table
+    } catch (err) {
+        logger.error(`while updating table ${table._id}`, err)
+        throw err
+    }
+}
+
 async function getById(tableId) {
     try {
         const collection = await dbService.getCollection('tables')
@@ -39,33 +80,8 @@ async function getById(tableId) {
     }
 }
 
-async function insert(table) {
-    try {
-        console.log('table.service table before:', table);
-
-        const tableForDB = setDeckToGame(table)
-        console.log('tableForDBBBBBBBBBBBBBBBBBbbb', tableForDB);
-        const collection = await dbService.getCollection('tables')
-        await collection.insertOne(tableForDB)
-
-        const collectionTR = await dbService.getCollection('tables-rounds')
-        await collectionTR.insertOne(tableForDB)
-
-        console.log('table.service table after:', tableForDB)
-        // console.log('table INSERTED:', tableAdded);
-        return tableForDB
-    } catch (err) {
-        logger.error('cannot INSERT table. (from table.service)', err)
-        throw err
-    }
-}
-
-
-
-function setDeckToGame(table) {
-    //Get a deck
-    var deck = deckService.getNewDeck()
-    table.deck = deck
+function setNewTable(table) {
+    table.createdAt = Date.now()
 
     //create a players array
     var players = new Array(table.numOfPlayers)
@@ -75,6 +91,17 @@ function setDeckToGame(table) {
     }
     table = { ...table, players }
 
+    const tableee = newRound(table)
+    console.log('eeeeeeeeeeeeeeeeeeeeeee', tableee);
+    return tableee
+}
+
+function newRound(table) {
+
+    //Get a deck
+    var deck = deckService.getNewDeck()
+    table.deck = deck
+
     //Deal Deck
     dealDeck(table)
 
@@ -82,14 +109,15 @@ function setDeckToGame(table) {
     const tableReady = prepareFlop(table)
     delete tableReady.deck
     // console.log('table After EVERYTHING:', tableReady);
-
+    // tableReady = prepareCards(tableReady)
     // await (tableReady);
     // const tableAdded = await add(tableReady)
     // console.log('tableAdded:', tableAdded);
-    console.log('tableReadyyyyyyyyyyyyyyyyyyyy', tableReady);
+    // console.log('tableReadyyyyyyyyyyyyyyyyyyyy', tableReady);
     return tableReady
     //send to the backend and then to the database
 }
+
 
 function dealDeck(table) {
     const loops = table.mode === 'poker' ? 2 : 4;
@@ -101,6 +129,7 @@ function dealDeck(table) {
 
 }
 
+//prepare flop after getting a table 
 function prepareFlop(table) {
 
     const flop = []
@@ -125,6 +154,13 @@ function prepareFlop(table) {
 
     return table
 }
+
+// function prepareCards(table) {
+//     for (let i = 0; i < table.flop.length; i++) {
+//         table.flop.card.isShown = false
+//     }
+//     return table
+// }
 
 
 

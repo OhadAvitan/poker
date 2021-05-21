@@ -7,7 +7,7 @@ const { insertTable, getTable, getTables, updateTable } = require('./table.contr
 router.get('/', getTables)
 router.post('/', insertTable)
 router.get('/:id', getTable)
-// router.put('/:id', updateTable)
+router.put('/:id', updateTable)
 
 // router.put('/:id',  requireAuth, updateUser)
 // router.delete('/:id',  requireAuth, requireAdmin, deleteUser)
