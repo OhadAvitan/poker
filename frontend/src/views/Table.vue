@@ -1,11 +1,22 @@
 <template>
   <section class="table-view">
-    <section v-show="!isPlayersSet">
-      <h2>Wait for the players to join</h2>
-      <h3>Players inside:{{ users.length }}</h3>
-      <seats-form :tableId="tableId" @seatsAreSet="seatsAreSet" />
-    </section>
-    <section v-show="isPlayersSet">
+    <button @click="onChangeSeats">{{ changeSeatsAction }}</button>
+    <div v-show="changeSeats">
+      <change-seats />
+    </div>
+    <!-- <section>
+      <div class="lds-ellipsis">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </section> -->
+    <section>
+      <h3>Wait for the players to join</h3>
+      <pre style="text-align: left">table:{{ table }}</pre>
+      <button @click="newRound">New round</button>
+      <!-- <h2>Players count:{{ this.table.players.length }}</h2> -->
       <div class="table"></div>
       <div class="cards">
         <div
@@ -29,39 +40,45 @@
 </template>
 
 <script>
-import SeatsForm from "../cmps/SeatsForm.vue";
+import ChangeSeats from "../cmps/ChangeSeats.vue";
 import tableService from "@/services/tableService.js";
 
 export default {
-  // action: ['open flop','open turn','open river'],
   data() {
     return {
-      imgSrc: require("@/assets/imgs/table.png"),
-      tableId: null,
+      // imgSrc: require("@/assets/imgs/table.png"),
       table: null,
       flop: null,
-      isPlayersSet: false,
       indexAction: 2,
       action: this.tableActions(this.indexAction),
+      changeSeats: false,
+      changeSeatsAction: 'Change Seats',
       // tableFromParams: null,
     };
   },
-  created() {
+  async created() {
     // this.getTableFromParams()
     // console.log(this.tableTrans);
     // console.log(this.$route.params._id);
-    this.tableId = this.$route.params._id;
-    this.action = "open flop";
+    // this.table = await this.getTableFromDB(this.$route.params._id)
+    this.table = await tableService.getById(this.$route.params._id)
+    console.log('this.tableeeeeeeeeeee',this.table);
+    this.action = "open flop"
   },
   methods: {
-    getTableFromDB() {
-      const table = tableService.getTable(this.tableId);
-      console.log("table from service (Table)", table);
+    // async newRound(table) {
+    //   await 
+    //   this.flop = this.table.flop;
+    // },
+    onChangeSeats(){
+      this.changeSeats = !this.changeSeats
+      if(this.changeSeats) this.changeSeatsAction = 'Save'
+      else this.changeSeatsAction = 'Change Seats'
     },
-    seatsAreSet(table) {
-      this.table = table;
-      this.flop = this.table.flop;
-      this.isPlayersSet = true;
+    async newRound() {
+      console.log('this.table._id:(Table):',this.table._id);
+      const pp = await tableService.newRound(this.table._id)
+      console.log('PPPPPPPPPPPPPPPPPPPPPPPPP',pp);
     },
     cardColor(card) {
       if (card.suit === "♠" || card.suit === "♣") {
@@ -106,7 +123,7 @@ export default {
     },
   },
   components: {
-    SeatsForm,
+    ChangeSeats,
   },
 };
 </script>

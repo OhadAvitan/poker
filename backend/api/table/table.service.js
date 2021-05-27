@@ -1,8 +1,8 @@
 const ObjectId = require('mongodb').ObjectId
 
 // const logger = require('../../services/logger.service')
+const userService = require('../user/user.service')
 const dbService = require('../../services/db.service.js')
-const playerService = require('../../services/player.service.js')
 const deckService = require('../../services/deck.service.js')
 
 module.exports = {
@@ -10,12 +10,13 @@ module.exports = {
     insert,
     update,
     getById,
+    newRound,
     // setNewTable
 }
 
 async function query() {
     try {
-        console.log('QUERY: (from table.service):');
+        console.log('QUERY:(table.service):');
 
         const collection = await dbService.getCollection('tables')
         // console.log('collection:', collection);
@@ -23,28 +24,31 @@ async function query() {
         // console.log('tablesQuery:', tablesQuery);
         return tablesQuery
     } catch (err) {
-        logger.error('cannot INSERT table. (from table.service)', err)
+        logger.error('cannot QUERY table. (from table.service)', err)
         throw err
     }
 }
 
 async function insert(table) {
     try {
-        console.log('table.service table before:', table);
-
-        const tableForDB = setNewTable(table)
-        // console.log('tableForDBBBBBBBBBBBBBBBBBbbb', tableForDB);
+        // console.log('table.service table before:', table);
+        // if (userService.isUserExist(table.owner.phoneNumber)) { return false }
+        const tableForDB = await setNewTable(table)
         const collection = await dbService.getCollection('tables')
         await collection.insertOne(tableForDB)
 
-        const collectionTR = await dbService.getCollection('tables-rounds')
-        var tableRounds = { _id: tableForDB._id }
-        tableRounds.rounds = []
-        console.log(tableRounds);
-        await collectionTR.insertOne(tableRounds)
+        // const collection1 = await dbService.getCollection('users')
+        // await collection1.insertOne(tableForDB)
+
+        // const what = await collection1.find({ phoneNumber: "0555555555" })
+        // console.log('whaaaaaaaaaaaaaaaaaaaaaaaat', what.query);
+        // const collectionTR = await dbService.getCollection('tables-rounds')
+        // var tableRounds = { _id: tableForDB._id }
+        // tableRounds.rounds = []
+        // console.log(tableRounds);
+        // await collectionTR.insertOne(tableRounds)
 
         // console.log('table.service table after:', tableForDB)
-        // console.log('table INSERTED:', tableAdded);
         return tableForDB
     } catch (err) {
         logger.error('cannot INSERT table. (from table.service)', err)
@@ -56,12 +60,10 @@ async function update(tempTable) {
     try {
         const table = JSON.parse(JSON.stringify(tempTable))
         table._id = ObjectId(table._id)
-        // console.log('table._id', table._id);
-        // console.log('TABLEEEEEEEEEEEEEE', table);
-        console.log('IM 222222222222222222222');
+        console.log('UPDATE. 11111111111111111111');
         const collection = await dbService.getCollection('tables')
         await collection.updateOne({ '_id': table._id }, { $set: table })
-        console.log('IM 3333333333333333333');
+        console.log('UPDATE. 22222222222222222222');
         return table
     } catch (err) {
         logger.error(`while updating table ${table._id}`, err)
@@ -80,34 +82,61 @@ async function getById(tableId) {
     }
 }
 
-function setNewTable(table) {
+async function setNewTable(table) {
+    table.owner.hand = {}
+    table.owner = await addOwnerToUsersDB(table.owner)
+    // if (table.owner) return false
     table.createdAt = Date.now()
-
+    table.players = []
+    console.log('table.ownerrr1111111111111', table.owner);
+    const ownerSpread = { ...table.owner }
+    // console.log('tttttttttttttttt', tt);
+    table.players.push(ownerSpread)
+    // console.log('11111111111111', table);
+    // console.log(ttt);
     //create a players array
-    var players = new Array(table.numOfPlayers)
-    delete table.numOfPlayers
-    for (let i = 0; i < players.length; i++) {
-        players[i] = playerService.newPlayer();
-    }
-    table = { ...table, players }
+    // var players = new Array(table.numOfPlayers)
+    // delete table.numOfPlayers
+    // for (let i = 0; i < players.length; i++) {
+    //     players[i] = playerService.newPlayer();
+    // }
+    // table = { ...table, players }
+    // console.log('tableeeeeeeeeeeeeeeeeeee', table);
 
-    const tableee = newRound(table)
-    console.log('eeeeeeeeeeeeeeeeeeeeeee', tableee);
-    return tableee
+    // const tableee = newRound(table)
+    return table
 }
 
-function newRound(table) {
+async function addOwnerToUsersDB(owner) {
+    var newOwner = { ...owner }
+    newOwner = await userService.insert(newOwner, true)
+    console.log('newOwnerrrrrrrrrrrrrrrrrr', newOwner);
+    return newOwner
+}
 
+async function newRound(tableId) {
+    console.log('newRound:(table.service):');
+    const table = await getById(tableId)
     //Get a deck
-    var deck = deckService.getNewDeck()
-    table.deck = deck
+    console.log('NEW ROUND. 111: table', table);
+    table.deck = await deckService.getNewDeck()
 
+    console.log('NEW ROUND. 1111111111111111111111');
+    console.log('-------------------------------');
+    console.log('AFTER GET DECK', table);
+    console.log('-------------------------------');
     //Deal Deck
-    dealDeck(table)
+    table = await dealDeck(table)
+    console.log('AFTER DEAL DECK', table);
+    console.log('-------------------------------');
 
     //Prepare flop
     const tableReady = prepareFlop(table)
     delete tableReady.deck
+    console.log('NEW ROUND. 2222222222222222222222');
+    console.log('table:', tableReady);
+
+    // const tableeee = await update(tableReady)
     // console.log('table After EVERYTHING:', tableReady);
     // tableReady = prepareCards(tableReady)
     // await (tableReady);
@@ -118,18 +147,31 @@ function newRound(table) {
     //send to the backend and then to the database
 }
 
-
-function dealDeck(table) {
-    const loops = table.mode === 'poker' ? 2 : 4;
-    for (let i = 0; i < loops; i++) {
-        for (let j = 0; j < table.players.length; j++) {
-            table.players[j].hand.push(table.deck.shift())
-        }
-    }
+function createsHands() {
 
 }
 
-//prepare flop after getting a table 
+function dealDeck(table) {
+    console.log('0--------0');
+    const loops = table.mode === 'poker' ? 2 : 4;
+    console.log('1--------1');
+    for (let i = 0; i < loops; i++) {
+        console.log('2--------2');
+        for (let j = 0; j < table.players.length; j++) {
+            console.log('3--------3', table.players.length);
+            console.log('3--------3', table.players[j]);
+            table.players[j].hand = 0
+            console.log('3--------3', table.players[jc]);
+            // table.players[j].hand.push(table.deck.shift())
+        }
+    }
+    console.log('4--------4');
+
+    return table
+
+}
+
+//prepare flop after getting a table with a deck
 function prepareFlop(table) {
 
     const flop = []
@@ -154,15 +196,6 @@ function prepareFlop(table) {
 
     return table
 }
-
-// function prepareCards(table) {
-//     for (let i = 0; i < table.flop.length; i++) {
-//         table.flop.card.isShown = false
-//     }
-//     return table
-// }
-
-
 
 
 

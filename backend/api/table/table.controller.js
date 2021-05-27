@@ -3,14 +3,9 @@ const logger = require('../../services/logger.service')
 
 async function insertTable(req, res) {
     try {
-        // console.log('table.controller req.body:', req.body);
         const table = await tableService.insert(req.body)
-        // console.log('table.controller afterrrrrrrrrrrr service:', table)
-        // console.log('table.controller after serviceeeeeee333333:',res.send(table))
         console.log('TABLE INSERTED');
         res.send(table)
-        // res.send('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
-        // console.log('table after INSERTED:', table);
     } catch (err) {
         logger.error('Failed to ...', err)
         res.status(500).send({ err: 'Failed to INSERT table.' })
@@ -29,7 +24,7 @@ async function getTables(req, res) {
 
 async function getTable(req, res) {
     try {
-        // console.log('req.params', req.params);
+        // console.log('req.params(table.controller):', req.params)
         const table = await tableService.getById(req.params.id)
         res.send(table)
     } catch (err) {
@@ -53,10 +48,28 @@ async function updateTable(req, res) {
     }
 }
 
+async function getNewRound(req, res) {
+    try {
+        // console.log('req.params', req.params);
+        const tableId = req.params.id
+        // console.log('req.params', tableId);
+        // console.log('req.body', req.body);
+        console.log('getNewRound:(table.controller):');
+        var newRoundTable = await tableService.newRound(tableId)
+        // console.log('newRoundTable::::', newRoundTable);
+        // const table = await tableService.update(tempTable)
+        res.send(newRoundTable)
+    } catch (err) {
+        logger.error('Failed to UPDATE table', err)
+        res.status(500).send({ err: 'Failed to UPDATE table' })
+    }
+}
+
 module.exports = {
     insertTable,
     getTable,
     getTables,
-    updateTable
+    updateTable,
+    getNewRound
 
 }

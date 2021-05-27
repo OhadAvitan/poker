@@ -11,6 +11,7 @@ export default {
     add,
     update,
     getById,
+    newRound,
     // join
     //     remove,
     //     save
@@ -22,7 +23,7 @@ async function query() {
 }
 
 function add(table) {
-    console.log('tableService: (ADD)', table)
+    // console.log('tableService: (ADD)', table)
     // const tableSpread = { ...table }
     // console.log('tableService: (tt)', table)
     return httpService.post(`table/`, table)
@@ -30,6 +31,10 @@ function add(table) {
 
 function getById(tableId) {
     return httpService.get(`table/${tableId}`)
+}
+
+function newRound(tableId) {
+    return httpService.put(`table/${tableId}/newround`)
 }
 
 function update(table) {

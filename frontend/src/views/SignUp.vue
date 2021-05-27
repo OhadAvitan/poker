@@ -20,6 +20,7 @@
       />
     </section>
     <button @click="onSignup">Sign Up</button>
+    <!-- <button @click="onSomething">On something</button> -->
   </div>
 </template>
 
@@ -28,30 +29,35 @@ import utilService from "@/services/utilService.js";
 import userService from "@/services/userService.js";
 
 export default {
-  props: ["tableId"],
   data() {
     return {
       user: {
         fullname: "",
         phoneNumber: "",
-        // email:'',
+        joinTableId: this.$route.params.tableId,
       },
     };
   },
+  created() {
+
+},
   methods: {
     async onSignup() {
-      const userCred = { ...this.user };
+      const userCred = { ...this.user }
       if (!utilService.checkPhoneNumber(userCred.phoneNumber)) {
-        alert("Phone number is Invalide");
-        return;
+        alert("Phone number is Invalide")
+        return
       }
-      const user = await userService.add(userCred);
+      const user = await userService.add(userCred)
       if (!user) {
-        alert("User already Exist..heading to login page");
-        this.$router.push(`/login`);
-        return;
+        alert("User already Exist..heading to login page")
+        this.$router.push(`/login`)
+        return
       }
-      console.log("onSignup USER returns from DB:", user);
+      console.log("onSignup USER returns from DB:", user)
+    },
+    onSomething() {
+      console.log(this.$route.params)
     },
   },
 };

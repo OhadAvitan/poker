@@ -29,7 +29,7 @@ const routes = [
   },
   {
     // path: '/table/:id',
-    path: '/signup',
+    path: '/signup/:tableId',
     component: SignUp
   },
   {

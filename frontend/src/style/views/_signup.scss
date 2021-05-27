@@ -40,5 +40,8 @@
         padding: 8px 40px;
         border-radius: 0.3rem;
         cursor: pointer;
+        &:hover {
+            transform: scale(1.06, 1.04);
+        }
     }
 }

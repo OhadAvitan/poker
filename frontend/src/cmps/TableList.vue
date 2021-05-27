@@ -5,11 +5,10 @@
     </div>
     <div v-else>
       <div class="table-preview" v-for="table in tables" :key="table.id">
-        <p>Owner: {{ table.owner }}</p>
-        <p>Owner: {{ table._id }}</p>
-        <p>Players: {{ table.players.length }}</p>
+        <p>Owner: {{ table.owner.fullname }}</p>
+        <!-- <p>Players: {{ table.players.length }}</p> -->
         <p>Mode: {{ table.mode }}</p>
-        <button @click="joinTable(table._id)">Join</button>
+        <button @click="joinTable(table._id)">join</button>
       </div>
     </div>
   </div>
@@ -25,14 +24,15 @@ export default {
   },
   created() {
     // console.log('asdsdasdasdadsa');
-    // // console.log('asdsdasdasdadsa', this.props);
+    // console.log('asdsdasdasdadsa', this.$props);
     // console.log('tablessssssssssssssss', this.tablesData);
     // if(this.props.tables.length === 0) return true
     //     else return false
   },
   methods: {
     joinTable(tableId) {
-      this.$router.push("/signup", tableId);
+      // this.$router.push("/signup", tableId);
+      this.$router.push('/signup/'+tableId);
     },
   },
   computed: {},

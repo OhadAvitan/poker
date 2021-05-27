@@ -36,8 +36,13 @@ function createDeck() {
     return newDeck;
 }
 
-function createCard(id, num, suit, isShown = false) {
-    const card = { id, num, suit, isShown };
+// function createCard(id, num, suit, isShown = false) {
+//     const card = { id, num, suit, isShown };
+//     return card;
+// }
+
+function createCard(id, num, suit) {
+    const card = { id, num, suit };
     return card;
 }
 

@@ -7,24 +7,22 @@ module.exports = {
     insert,
     query,
     getById,
-    getByUsername,
-    remove,
+    isUserExist,
     update,
-    add
+    add,
+    getByUsername,
+    remove
 }
 
-async function insert(user) {
+async function insert(user, isOwner = false) {
     try {
-        console.log('userrrrrrrrrrrrrrrr', user);
         const collection = await dbService.getCollection('users')
-
-        //Checks if exist
-        const isExsit = await collection.find({ 'phoneNumber': user.phoneNumber }).count() === 1 ? true : false
-        if (isExsit) return false
+        // if (isUserExist(user)) { return false }
         // if (isExsit) return alert('User already Exist..heading to login page')
-
         //Insert if not exist
+        user.isOwner = isOwner
         await collection.insertOne(user)
+        console.log('USER INSERTED');
         return user
     } catch (err) {
         logger.error(`while inserting user ${username}`, err)
@@ -32,17 +30,13 @@ async function insert(user) {
     }
 }
 
+async function isUserExist(user) {
+    const collection = await dbService.getCollection('users')
 
-
-
-
-
-
-
-
-
-
-
+    //Checks if exist .. not exist return false (cetch err )
+    const isExsit = await collection.find({ 'phoneNumber': user.phoneNumber }).count() === 1 ? true : false
+    return isExsit
+}
 
 
 
