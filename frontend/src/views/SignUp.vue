@@ -20,7 +20,7 @@
       />
     </section>
     <button @click="onSignup">Sign Up</button>
-    <!-- <button @click="onSomething">On something</button> -->
+    <button @click="onSomething">On something</button>
   </div>
 </template>
 
@@ -48,6 +48,9 @@ export default {
         alert("Phone number is Invalide")
         return
       }
+      const joinTableId = {userCred}
+      delete userCred.joinTableId
+      console.log('userCreddddddddddddd',userCred);
       const user = await userService.add(userCred)
       if (!user) {
         alert("User already Exist..heading to login page")
@@ -55,9 +58,11 @@ export default {
         return
       }
       console.log("onSignup USER returns from DB:", user)
+      const temp = await userService.joinTable(user._id , joinTableId)
+      console.log(temp);
     },
     onSomething() {
-      console.log(this.$route.params)
+      // console.log(this.$route.params)
     },
   },
 };

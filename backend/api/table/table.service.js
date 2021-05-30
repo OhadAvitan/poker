@@ -83,7 +83,7 @@ async function getById(tableId) {
 }
 
 async function setNewTable(table) {
-    table.owner.hand = {}
+    table.owner.hand = []
     table.owner = await addOwnerToUsersDB(table.owner)
     // if (table.owner) return false
     table.createdAt = Date.now()
@@ -118,20 +118,25 @@ async function newRound(tableId) {
     console.log('newRound:(table.service):');
     const table = await getById(tableId)
     //Get a deck
-    console.log('NEW ROUND. 111: table', table);
+    // console.log('NEW ROUND. 111: table', table);
     table.deck = await deckService.getNewDeck()
 
-    console.log('NEW ROUND. 1111111111111111111111');
+    // console.log('NEW ROUND. 1111111111111111111111');
+    console.log('-------------------------------');
     console.log('-------------------------------');
     console.log('AFTER GET DECK', table);
     console.log('-------------------------------');
+    console.log('-------------------------------');
     //Deal Deck
-    table = await dealDeck(table)
-    console.log('AFTER DEAL DECK', table);
+    const table1 = await dealDeck(table)
+    console.log('88888888888888888888888888888888');
+    console.log('88888888888888888888888888888888');
+    console.log('AFTER DEAL DECK', table1);
+    console.log('-------------------------------');
     console.log('-------------------------------');
 
     //Prepare flop
-    const tableReady = prepareFlop(table)
+    const tableReady = prepareFlop(table1)
     delete tableReady.deck
     console.log('NEW ROUND. 2222222222222222222222');
     console.log('table:', tableReady);
@@ -152,23 +157,22 @@ function createsHands() {
 }
 
 function dealDeck(table) {
-    console.log('0--------0');
+    console.log('----------DEAL DECK----------');
+    console.log('******Table player length:', table.players.length);
     const loops = table.mode === 'poker' ? 2 : 4;
-    console.log('1--------1');
     for (let i = 0; i < loops; i++) {
-        console.log('2--------2');
         for (let j = 0; j < table.players.length; j++) {
-            console.log('3--------3', table.players.length);
-            console.log('3--------3', table.players[j]);
-            table.players[j].hand = 0
-            console.log('3--------3', table.players[jc]);
-            // table.players[j].hand.push(table.deck.shift())
+            console.log('1--------1', table.players[j]);
+            // table.players[j].hand = 0
+            // console.log('2--------2', table.players[j]);
+            var tempCard = table.deck.shift()
+            console.log('tempCard', tempCard);
+            table.players[j].hand.push(tempCard)
         }
     }
     console.log('4--------4');
-
+    console.log('TABLEEEEEEEEEEE Before return:', table);
     return table
-
 }
 
 //prepare flop after getting a table with a deck

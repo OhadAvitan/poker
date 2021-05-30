@@ -16,6 +16,9 @@
       <h3>Wait for the players to join</h3>
       <pre style="text-align: left">table:{{ table }}</pre>
       <button @click="newRound">New round</button>
+      <button class="action-btn" @click="tableActions(indexAction)">
+        {{ action }}
+      </button>
       <!-- <h2>Players count:{{ this.table.players.length }}</h2> -->
       <div class="table"></div>
       <div class="cards">
@@ -32,9 +35,6 @@
           </div>
         </div>
       </div>
-      <button class="action-btn" @click="tableActions(indexAction)">
-        {{ action }}
-      </button>
     </section>
   </section>
 </template>
@@ -78,6 +78,7 @@ export default {
     async newRound() {
       console.log('this.table._id:(Table):',this.table._id);
       const pp = await tableService.newRound(this.table._id)
+      this.flop = pp.flop
       console.log('PPPPPPPPPPPPPPPPPPPPPPPPP',pp);
     },
     cardColor(card) {

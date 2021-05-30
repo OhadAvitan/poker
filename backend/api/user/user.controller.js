@@ -12,6 +12,17 @@ async function insertUser(req, res) {
     }
 }
 
+async function addUserToTable(req, res) {
+    try {
+        console.log('addUserToTable --- req.params(user.controller):', req.params);
+        const user = await userService.addUserToTable(req.body)
+        res.send(user)
+    } catch (err) {
+        logger.error('Failed to INSERT user', err)
+        res.status(500).send({ err: 'Failed to INSERT user' })
+    }
+}
+
 
 // async function getUser(req, res) {
 //     try {
@@ -60,6 +71,7 @@ async function insertUser(req, res) {
 
 module.exports = {
     insertUser,
+    addUserToTable,
     // getUsers,
     // deleteUser,
     // updateUser

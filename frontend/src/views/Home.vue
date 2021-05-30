@@ -36,14 +36,14 @@ export default {
     },
     async created(){
         this.fadeOutModal()
-        this.goFullscreen()
+        // this.goFullscreen()
         this.tables = await tableService.query(); 
         console.log('this.tables:',this.tables);
         
     },
     methods: {
         goFullscreen(){
-            // document.documentElement.webkitRequestFullscreen()
+            document.documentElement.webkitRequestFullscreen()
         },
         onNewTable() {
             this.isNewTableShown = true

@@ -5,11 +5,12 @@ const ObjectId = require('mongodb').ObjectId
 
 module.exports = {
     insert,
+    isUserExist,
     query,
     getById,
-    isUserExist,
-    update,
     add,
+    addUserToTable,
+    update,
     getByUsername,
     remove
 }
@@ -38,9 +39,6 @@ async function isUserExist(user) {
     return isExsit
 }
 
-
-
-
 async function query(filterBy = {}) {
     const criteria = _buildCriteria(filterBy)
     try {
@@ -65,17 +63,32 @@ async function getById(userId) {
     try {
         const collection = await dbService.getCollection('user')
         const user = await collection.findOne({ '_id': ObjectId(userId) })
-        delete user.password
+        // delete user.password
 
-        user.givenReviews = await reviewService.query({ byUserId: ObjectId(user._id) })
-        user.givenReviews = user.givenReviews.map(review => {
-            delete review.byUser
-            return review
-        })
+        // user.givenReviews = await reviewService.query({ byUserId: ObjectId(user._id) })
+        // user.givenReviews = user.givenReviews.map(review => {
+        //     delete review.byUser
+        //     return review
+        // })
 
         return user
     } catch (err) {
         logger.error(`while finding user ${userId}`, err)
+        throw err
+    }
+}
+
+async function addUserToTable(tableId, userId) {
+    try {
+        // console.log('UserToTable (table.service):');
+        const table = await getById(tableId)
+        const user = await userService.getById(userId)
+        table.players.push(user)
+        console.log('UserToTable (table.service):');
+        console.log('table', table);
+        // return table
+    } catch (err) {
+        logger.error(`while finding table ${tableId}`, err)
         throw err
     }
 }
@@ -136,6 +149,11 @@ async function add(user) {
         throw err
     }
 }
+
+
+
+
+
 
 function _buildCriteria(filterBy) {
     const criteria = {}

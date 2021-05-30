@@ -55,8 +55,8 @@ async function getNewRound(req, res) {
         // console.log('req.params', tableId);
         // console.log('req.body', req.body);
         console.log('getNewRound:(table.controller):');
-        var newRoundTable = await tableService.newRound(tableId)
-        // console.log('newRoundTable::::', newRoundTable);
+        const newRoundTable = await tableService.newRound(tableId)
+        console.log('newRoundTable:::::::::::::::::::', newRoundTable);
         // const table = await tableService.update(tempTable)
         res.send(newRoundTable)
     } catch (err) {
