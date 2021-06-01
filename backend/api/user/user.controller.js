@@ -14,8 +14,12 @@ async function insertUser(req, res) {
 
 async function addUserToTable(req, res) {
     try {
-        console.log('addUserToTable --- req.params(user.controller):', req.params);
-        const user = await userService.addUserToTable(req.body)
+        const userId = req.params.id
+        const tableId = req.params.tableId
+        // console.log('addUserToTable --- req.params(user.controller):', req.params);
+        // console.log('addUserToTable --- req.params(user.controller):', req.params.id);
+        // console.log('addUserToTable --- req.params(user.controller):', req.params.tableId);
+        const user = await userService.addUserToTable(userId, tableId)
         res.send(user)
     } catch (err) {
         logger.error('Failed to INSERT user', err)
@@ -23,16 +27,15 @@ async function addUserToTable(req, res) {
     }
 }
 
-
-// async function getUser(req, res) {
-//     try {
-//         const user = await userService.getById(req.params.id)
-//         res.send(user)
-//     } catch (err) {
-//         logger.error('Failed to get user', err)
-//         res.status(500).send({ err: 'Failed to get user' })
-//     }
-// }
+async function getUser(req, res) {
+    try {
+        const user = await userService.getById(req.params.id)
+        res.send(user)
+    } catch (err) {
+        logger.error('Failed to get user', err)
+        res.status(500).send({ err: 'Failed to get user' })
+    }
+}
 
 // async function getUsers(req, res) {
 //     try {
@@ -72,6 +75,7 @@ async function addUserToTable(req, res) {
 module.exports = {
     insertUser,
     addUserToTable,
+    getUser,
     // getUsers,
     // deleteUser,
     // updateUser

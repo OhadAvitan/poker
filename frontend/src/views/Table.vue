@@ -4,6 +4,7 @@
     <div v-show="changeSeats">
       <change-seats />
     </div>
+    <h3>Players connected:{{ this.table.players.length }}</h3>
     <!-- <section>
       <div class="lds-ellipsis">
         <div></div>
@@ -19,7 +20,6 @@
       <button class="action-btn" @click="tableActions(indexAction)">
         {{ action }}
       </button>
-      <!-- <h2>Players count:{{ this.table.players.length }}</h2> -->
       <div class="table"></div>
       <div class="cards">
         <div
@@ -61,7 +61,7 @@ export default {
     // console.log(this.tableTrans);
     // console.log(this.$route.params._id);
     // this.table = await this.getTableFromDB(this.$route.params._id)
-    this.table = await tableService.getById(this.$route.params._id)
+    this.table = await tableService.getById(this.$route.params.id)
     console.log('this.tableeeeeeeeeeee',this.table);
     this.action = "open flop"
   },
@@ -76,7 +76,7 @@ export default {
       else this.changeSeatsAction = 'Change Seats'
     },
     async newRound() {
-      console.log('this.table._id:(Table):',this.table._id);
+      // console.log('this.table._id:(Table):',this.table._id);
       const pp = await tableService.newRound(this.table._id)
       this.flop = pp.flop
       console.log('PPPPPPPPPPPPPPPPPPPPPPPPP',pp);

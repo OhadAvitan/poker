@@ -48,18 +48,23 @@ export default {
         alert("Phone number is Invalide")
         return
       }
-      const joinTableId = {userCred}
+
+      const {joinTableId} = userCred
       delete userCred.joinTableId
-      console.log('userCreddddddddddddd',userCred);
+      console.log('userCreddddddddddddd',userCred)
       const user = await userService.add(userCred)
       if (!user) {
         alert("User already Exist..heading to login page")
         this.$router.push(`/login`)
         return
       }
-      console.log("onSignup USER returns from DB:", user)
+
+      console.log("onSignUp USER returns from DB:", user)
       const temp = await userService.joinTable(user._id , joinTableId)
-      console.log(temp);
+      // console.log('should be true:',temp);
+      if(temp) {
+        this.$router.push(`/table/${joinTableId}/hand/${user._id}`)
+      }
     },
     onSomething() {
       // console.log(this.$route.params)

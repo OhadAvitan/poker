@@ -10,9 +10,9 @@ import { httpService } from './httpService.js';
 export default {
     query,
     add,
+    getById,
     joinTable,
     // update,
-    // getById,
     // remove,
     // save
 }
@@ -28,6 +28,10 @@ function add(userCred) {
     return httpService.post(`user/`, userCred)
 }
 
+function getById(userId) {
+    return httpService.get(`user/${userId}`)
+}
+
 function joinTable(userId, tableId) {
-    return httpService.put(`user/${userId}/join`, tableId)
+    return httpService.get(`user/${userId}/join/${tableId}`)
 }

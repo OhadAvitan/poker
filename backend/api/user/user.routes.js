@@ -6,10 +6,10 @@ const { insertUser, addUserToTable, getUser, getUsers, updateUser } = require('.
 // middleware that is specific to this router
 // router.use(requireAuth)
 
+router.get('/:id/join/:tableId', addUserToTable)
 router.post('/', insertUser)
-router.put('/:id/join', addUserToTable)
+router.get('/:id', getUser)
 // router.get('/', getUsers)
-// router.get('/:id', getUser)
 // router.put('/:id', updateUser)
 
 // router.put('/:id',  requireAuth, updateUser)

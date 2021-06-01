@@ -31,11 +31,14 @@ async function query() {
 
 async function insert(table) {
     try {
-        // console.log('table.service table before:', table);
+        console.log('table.service table before:', table);
         // if (userService.isUserExist(table.owner.phoneNumber)) { return false }
         const tableForDB = await setNewTable(table)
+        console.log('1-------------------');
         const collection = await dbService.getCollection('tables')
+        console.log('2-------------------');
         await collection.insertOne(tableForDB)
+        console.log('3-------------------');
 
         // const collection1 = await dbService.getCollection('users')
         // await collection1.insertOne(tableForDB)
@@ -58,12 +61,14 @@ async function insert(table) {
 
 async function update(tempTable) {
     try {
-        const table = JSON.parse(JSON.stringify(tempTable))
-        table._id = ObjectId(table._id)
-        console.log('UPDATE. 11111111111111111111');
+        const table = { ...tempTable }
+        // const table = JSON.parse(JSON.stringify(tempTable))
+        // console.log('tabletryyyyyyyyyyyyy', tabletry);
+        // console.log('tableeeeeeeeeeeeeeee', table);
+        // console.log('UPDATE. 11111111111111111111');
         const collection = await dbService.getCollection('tables')
-        await collection.updateOne({ '_id': table._id }, { $set: table })
-        console.log('UPDATE. 22222222222222222222');
+        await collection.updateOne({ '_id': ObjectId(table._id) }, { $set: table })
+        // console.log('UPDATE. 22222222222222222222');
         return table
     } catch (err) {
         logger.error(`while updating table ${table._id}`, err)
@@ -83,15 +88,16 @@ async function getById(tableId) {
 }
 
 async function setNewTable(table) {
-    table.owner.hand = []
-    table.owner = await addOwnerToUsersDB(table.owner)
+    // table.owner.hand = [] //I handle it in user service insert (make sure it not break something)
+    console.log('table.owner', table.owner.fullname);
+    // table.owner = await addOwnerToUsersDB(table.owner)
     // if (table.owner) return false
     table.createdAt = Date.now()
     table.players = []
     console.log('table.ownerrr1111111111111', table.owner);
-    const ownerSpread = { ...table.owner }
+    // const ownerSpread = { ...table.owner }
     // console.log('tttttttttttttttt', tt);
-    table.players.push(ownerSpread)
+    // table.players.push(ownerSpread)
     // console.log('11111111111111', table);
     // console.log(ttt);
     //create a players array
@@ -109,6 +115,7 @@ async function setNewTable(table) {
 
 async function addOwnerToUsersDB(owner) {
     var newOwner = { ...owner }
+    console.log('newOwner:::', newOwner);
     newOwner = await userService.insert(newOwner, true)
     console.log('newOwnerrrrrrrrrrrrrrrrrr', newOwner);
     return newOwner
@@ -141,32 +148,32 @@ async function newRound(tableId) {
     console.log('NEW ROUND. 2222222222222222222222');
     console.log('table:', tableReady);
 
-    // const tableeee = await update(tableReady)
+    const tableAfterUpdateDB = await update(tableReady)
     // console.log('table After EVERYTHING:', tableReady);
     // tableReady = prepareCards(tableReady)
     // await (tableReady);
     // const tableAdded = await add(tableReady)
     // console.log('tableAdded:', tableAdded);
     // console.log('tableReadyyyyyyyyyyyyyyyyyyyy', tableReady);
-    return tableReady
+    return tableAfterUpdateDB
     //send to the backend and then to the database
 }
 
-function createsHands() {
-
-}
-
 function dealDeck(table) {
+    //creates or resets hands to players
+    for (let i = 0; i < table.players.length; i++) {
+        table.players[i].hand = []
+    }
     console.log('----------DEAL DECK----------');
     console.log('******Table player length:', table.players.length);
     const loops = table.mode === 'poker' ? 2 : 4;
     for (let i = 0; i < loops; i++) {
         for (let j = 0; j < table.players.length; j++) {
-            console.log('1--------1', table.players[j]);
+            // console.log('1--------1', table.players[j]);
             // table.players[j].hand = 0
             // console.log('2--------2', table.players[j]);
             var tempCard = table.deck.shift()
-            console.log('tempCard', tempCard);
+            // console.log('tempCard', tempCard);
             table.players[j].hand.push(tempCard)
         }
     }

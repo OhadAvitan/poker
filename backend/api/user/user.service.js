@@ -1,4 +1,5 @@
 const dbService = require('../../services/db.service')
+const tableService = require('../table/table.service')
 // const logger = require('../../services/logger.service')
 const reviewService = require('../review/review.service')
 const ObjectId = require('mongodb').ObjectId
@@ -17,10 +18,13 @@ module.exports = {
 
 async function insert(user, isOwner = false) {
     try {
+        console.log('HIIIIIIIIIIIIIII');
         const collection = await dbService.getCollection('users')
+        console.log('HIIIIIIIIIIIIIII2222222');
         // if (isUserExist(user)) { return false }
         // if (isExsit) return alert('User already Exist..heading to login page')
         //Insert if not exist
+        // user.hand = []
         user.isOwner = isOwner
         await collection.insertOne(user)
         console.log('USER INSERTED');
@@ -42,7 +46,7 @@ async function isUserExist(user) {
 async function query(filterBy = {}) {
     const criteria = _buildCriteria(filterBy)
     try {
-        const collection = await dbService.getCollection('user')
+        const collection = await dbService.getCollection('users')
         var users = await collection.find(criteria).toArray()
         users = users.map(user => {
             delete user.password
@@ -61,7 +65,7 @@ async function query(filterBy = {}) {
 
 async function getById(userId) {
     try {
-        const collection = await dbService.getCollection('user')
+        const collection = await dbService.getCollection('users')
         const user = await collection.findOne({ '_id': ObjectId(userId) })
         // delete user.password
 
@@ -70,7 +74,7 @@ async function getById(userId) {
         //     delete review.byUser
         //     return review
         // })
-
+        console.log('user GET BY ID:', user);
         return user
     } catch (err) {
         logger.error(`while finding user ${userId}`, err)
@@ -78,15 +82,16 @@ async function getById(userId) {
     }
 }
 
-async function addUserToTable(tableId, userId) {
+async function addUserToTable(userId, tableId) {
     try {
         // console.log('UserToTable (table.service):');
-        const table = await getById(tableId)
-        const user = await userService.getById(userId)
+        // console.log('----------------------------');
+        const user = await getById(userId)
+        const table = await tableService.getById(tableId)
         table.players.push(user)
-        console.log('UserToTable (table.service):');
-        console.log('table', table);
-        // return table
+        //now I need to update the table in the DB
+        tableService.update(table)
+        return true
     } catch (err) {
         logger.error(`while finding table ${tableId}`, err)
         throw err
@@ -95,7 +100,7 @@ async function addUserToTable(tableId, userId) {
 
 async function getByUsername(username) {
     try {
-        const collection = await dbService.getCollection('user')
+        const collection = await dbService.getCollection('users')
         const user = await collection.findOne({ username })
         return user
     } catch (err) {
@@ -106,7 +111,7 @@ async function getByUsername(username) {
 
 async function remove(userId) {
     try {
-        const collection = await dbService.getCollection('user')
+        const collection = await dbService.getCollection('users')
         await collection.deleteOne({ '_id': ObjectId(userId) })
     } catch (err) {
         logger.error(`cannot remove user ${userId}`, err)
@@ -123,7 +128,7 @@ async function update(user) {
             fullname: user.fullname,
             score: user.score
         }
-        const collection = await dbService.getCollection('user')
+        const collection = await dbService.getCollection('users')
         await collection.updateOne({ '_id': userToSave._id }, { $set: userToSave })
         return userToSave;
     } catch (err) {
@@ -141,7 +146,7 @@ async function add(user) {
             fullname: user.fullname,
             score: user.score || 0
         }
-        const collection = await dbService.getCollection('user')
+        const collection = await dbService.getCollection('users')
         await collection.insertOne(userToAdd)
         return userToAdd
     } catch (err) {
