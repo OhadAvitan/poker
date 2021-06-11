@@ -56,20 +56,38 @@ async function getNewRound(req, res) {
         // console.log('req.body', req.body);
         console.log('getNewRound:(table.controller):');
         const newRoundTable = await tableService.newRound(tableId)
-        console.log('newRoundTable:::::::::::::::::::', newRoundTable);
+        // console.log('newRoundTable:::::::::::::::::::', newRoundTable);
         // const table = await tableService.update(tempTable)
         res.send(newRoundTable)
     } catch (err) {
-        logger.error('Failed to UPDATE table', err)
-        res.status(500).send({ err: 'Failed to UPDATE table' })
+        logger.error('Failed to NewRound table', err)
+        res.status(500).send({ err: 'Failed to NewRound table' })
     }
 }
+
+async function addUserToTable(req, res) {
+    try {
+        const tableId = req.params.id
+        const userId = req.params.userId
+        // console.log('addUserToTable --- req.params(user.controller):', req.params);
+        console.log('addUserToTable --- req.params(user.controller):', req.params.id);
+        console.log('addUserToTable --- req.params(user.controller):', req.params.userId);
+        const user = await tableService.addUserToTable(tableId, userId)
+        res.send(user)
+    } catch (err) {
+        logger.error('Failed to INSERT user', err)
+        res.status(500).send({ err: 'Failed to INSERT user' })
+    }
+}
+
 
 module.exports = {
     insertTable,
     getTable,
     getTables,
     updateTable,
-    getNewRound
+    getNewRound,
+    addUserToTable,
+
 
 }

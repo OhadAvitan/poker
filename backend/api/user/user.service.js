@@ -1,8 +1,8 @@
 const dbService = require('../../services/db.service')
-const tableService = require('../table/table.service')
 // const logger = require('../../services/logger.service')
-const reviewService = require('../review/review.service')
+// const reviewService = require('../review/review.service')
 const ObjectId = require('mongodb').ObjectId
+
 
 module.exports = {
     insert,
@@ -10,11 +10,11 @@ module.exports = {
     query,
     getById,
     add,
-    addUserToTable,
     update,
     getByUsername,
     remove
 }
+
 
 async function insert(user, isOwner = false) {
     try {
@@ -77,26 +77,11 @@ async function getById(userId) {
         console.log('user GET BY ID:', user);
         return user
     } catch (err) {
-        logger.error(`while finding user ${userId}`, err)
+        // logger.error(`while finding user ${userId}`, err)
         throw err
     }
 }
 
-async function addUserToTable(userId, tableId) {
-    try {
-        // console.log('UserToTable (table.service):');
-        // console.log('----------------------------');
-        const user = await getById(userId)
-        const table = await tableService.getById(tableId)
-        table.players.push(user)
-        //now I need to update the table in the DB
-        tableService.update(table)
-        return true
-    } catch (err) {
-        logger.error(`while finding table ${tableId}`, err)
-        throw err
-    }
-}
 
 async function getByUsername(username) {
     try {
@@ -124,10 +109,13 @@ async function update(user) {
         // peek only updatable fields!
         const userToSave = {
             _id: ObjectId(user._id),
-            username: user.username,
             fullname: user.fullname,
-            score: user.score
+            phoneNumber: user.phoneNumber,
+            joinTableId: user.joinTableId,
+            isOwner: user.isOwner,
+            hand: user.hand
         }
+        // const userToSave = { ...user }
         const collection = await dbService.getCollection('users')
         await collection.updateOne({ '_id': userToSave._id }, { $set: userToSave })
         return userToSave;
@@ -178,5 +166,7 @@ function _buildCriteria(filterBy) {
     }
     return criteria
 }
+
+
 
 

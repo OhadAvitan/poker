@@ -24,7 +24,8 @@
     <section>
       <label for="phone">Phone number:</label>
       <input
-        type="number"
+        type="text"
+        pattern="\d*"
         name="phone"
         id="pnumber"
         placeholder="Phone number"

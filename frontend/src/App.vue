@@ -1,8 +1,8 @@
 <template>
-<section :src="img" class="bgImg">
+  <section :src="img" class="bgImg">
     <app-header />
     <router-view />
-</section>
+  </section>
 </template>
 
 <script>

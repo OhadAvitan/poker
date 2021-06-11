@@ -15,6 +15,7 @@
       <input
         type="text"
         name="phone-number"
+        pattern="\d*"
         v-model="user.phoneNumber"
         placeholder="Your Phone number"
       />
@@ -25,8 +26,10 @@
 </template>
 
 <script>
-import utilService from "@/services/utilService.js";
-import userService from "@/services/userService.js";
+import utilService from "@/services/utilService.js"
+import tableService from "@/services/tableService.js"
+import userService from "@/services/userService.js"
+
 
 export default {
   data() {
@@ -50,7 +53,7 @@ export default {
       }
 
       const {joinTableId} = userCred
-      delete userCred.joinTableId
+      // delete userCred.joinTableId
       console.log('userCreddddddddddddd',userCred)
       const user = await userService.add(userCred)
       if (!user) {
@@ -60,7 +63,7 @@ export default {
       }
 
       console.log("onSignUp USER returns from DB:", user)
-      const temp = await userService.joinTable(user._id , joinTableId)
+      const temp = await tableService.joinTable( joinTableId, user._id)
       // console.log('should be true:',temp);
       if(temp) {
         this.$router.push(`/table/${joinTableId}/hand/${user._id}`)

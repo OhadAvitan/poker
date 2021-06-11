@@ -1,10 +1,32 @@
 <template>
   <div class="hand">
-    <h1>hand</h1>
-    <h1>hand</h1>
-    <h1>hand</h1>
-    <pre>{{ user }}</pre>
-    <button @click="print">Show User</button>
+    <div v-if="isHidden" class="nope">⛔️NOPE⛔️</div>
+    <div
+      v-else
+      class="hand-con"
+      v-for="card in hand"
+      :key="card.id"
+      :style="'color: ' + cardColor(card)"
+    >
+      <!-- v-for="(card, index) in hand" -->
+      <!-- <div :class="`card pos` + (index + 1)"> -->
+      <div>
+        <h5>{{ card.num }}</h5>
+        <h4>{{ card.suit }}</h4>
+        <h3>{{ card.suit }}</h3>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button @click="refresh" class="refresh-btn"><img :src="refreshImg" class="refresh"></button>
+      <!-- <p>Hide Hand</p> -->
+      <label  class="switch">
+        <img :src="eyeImg" class="eye">
+        <input @click="hideHand" type="checkbox" />
+        <span  class="slider round"></span>
+      </label>
+      <!-- <button>Hide Hand</button> -->
+    </div>
   </div>
 </template>
 
@@ -14,17 +36,33 @@ export default {
   data() {
     return {
       user: null,
-    };
+      table: null,
+      hand: null,
+      isHidden: false,
+      eyeImg: require('@/assets/imgs/eye.png'),
+      refreshImg: require('@/assets/imgs/refresh.png'),
+    }
   },
   async created() {
-    const userId = this.$route.params.userId
+    console.log(this.$route.params);
+    const { userId } = this.$route.params
     console.log('userId',userId);
-    const user = await userService.getById(userId)
-    this.user = user
+    this.user = await userService.getById(userId)
+    console.log('this.user:',this.user);
+    this.hand = this.user.hand
+    
   },
   methods: {
-    print() {
-      console.log(this.user);
+    refresh() {
+      location.reload();
+    },
+    cardColor(card) {
+      if (card.suit === "♠" || card.suit === "♣") {
+        return "black";
+      } else return "rgb(194, 16, 16)";
+    },
+    hideHand() {
+        this.isHidden = !this.isHidden
     }
   }
 

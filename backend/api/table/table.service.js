@@ -11,6 +11,7 @@ module.exports = {
     update,
     getById,
     newRound,
+    addUserToTable
     // setNewTable
 }
 
@@ -129,18 +130,25 @@ async function newRound(tableId) {
     table.deck = await deckService.getNewDeck()
 
     // console.log('NEW ROUND. 1111111111111111111111');
-    console.log('-------------------------------');
-    console.log('-------------------------------');
-    console.log('AFTER GET DECK', table);
-    console.log('-------------------------------');
-    console.log('-------------------------------');
+    // console.log('-------------------------------');
+    // console.log('-------------------------------');
+    // console.log('AFTER GET DECK', table);
+    // console.log('-------------------------------');
+    // console.log('-------------------------------');
     //Deal Deck
     const table1 = await dealDeck(table)
-    console.log('88888888888888888888888888888888');
-    console.log('88888888888888888888888888888888');
-    console.log('AFTER DEAL DECK', table1);
-    console.log('-------------------------------');
-    console.log('-------------------------------');
+    // console.log('88888888888888888888888888888888');
+    // console.log('88888888888888888888888888888888');
+    // console.log('AFTER DEAL DECK', table1);
+    // console.log('-------------------------------');
+    // console.log('-------------------------------');
+
+    //Update the USERS_DB with the hands
+    const tt = { ...table1 }
+
+    updateUserDbHands(tt)
+    // console.log(gg);
+
 
     //Prepare flop
     const tableReady = prepareFlop(table1)
@@ -155,6 +163,8 @@ async function newRound(tableId) {
     // const tableAdded = await add(tableReady)
     // console.log('tableAdded:', tableAdded);
     // console.log('tableReadyyyyyyyyyyyyyyyyyyyy', tableReady);
+
+    // return tableAfterUpdateDB.flop
     return tableAfterUpdateDB
     //send to the backend and then to the database
 }
@@ -180,6 +190,56 @@ function dealDeck(table) {
     console.log('4--------4');
     console.log('TABLEEEEEEEEEEE Before return:', table);
     return table
+}
+
+async function updateUserDbHands(table) {
+    try {
+        console.log('dsdsdsdsdsdsdsdsdsdsdsdsdsdsss');
+        console.log('dsdsdsdsdsdsdsdsdsdsdsdsdsdsss');
+        console.log('dsdsdsdsdsdsdsdsdsdsdsdsdsdsss');
+        // console.log('dsdsdsdsdsdsdsdsdsdsdsdsdsdsss');
+        // console.log('table', table);
+        // var userId = table.players[0]._id
+        // console.log('userId::::::::', userId);
+        // var tempUser = await userService.getById(userId)
+        // console.log('tempUser::::::::', tempUser);
+        // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+        // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+        // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+        // console.log('table.players:', table.players[0]._id);
+        // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+        // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+        // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+        // var playersHands = []
+        // var tempHand = null
+        for (var i = 0; i < table.players.length; i++) {
+            console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+            console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+            var userId = table.players[i]._id
+            var tempUser = await userService.getById(userId)
+            tempUser.hand = table.players[i].hand
+            console.log('00000000000000000000000000');
+            console.log(tempUser);
+            console.log('00000000000000000000000000');
+            var userAfterUpdate = await userService.update(tempUser)
+            console.log('userAfterUpdate:', userAfterUpdate);
+            // playersHands.push(tempHand)
+        }
+
+        // console.log('00000000000000000000000000');
+        // console.log('00000000000000000000000000');
+        // console.log('00000000000000000000000000');
+        // console.log(playersHands);
+        // console.log('00000000000000000000000000');
+        // console.log('00000000000000000000000000');
+        // console.log('00000000000000000000000000');
+
+    } catch (err) {
+        logger.error(`while Updating user Hands ${tableId}`, err)
+        throw err
+    }
+
+
 }
 
 //prepare flop after getting a table with a deck
@@ -208,6 +268,21 @@ function prepareFlop(table) {
     return table
 }
 
+async function addUserToTable(tableId, userId) {
+    try {
+        // console.log('UserToTable (table.service):');
+        // console.log('----------------------------');
+        const table = await getById(tableId)
+        const user = await userService.getById(userId)
+        table.players.push(user)
+        //now I need to update the table in the DB
+        update(table)
+        return true
+    } catch (err) {
+        logger.error(`while finding table ${tableId}`, err)
+        throw err
+    }
+}
 
 
 

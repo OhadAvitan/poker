@@ -1,8 +1,8 @@
 
 return to SignUp - user check if exist and then move to login
 
+move SignUp func to the backend
+
 
 
 Home - created => fullScreen and fadeOut(200 to 4000)
-
-mone SignUp func to the backend

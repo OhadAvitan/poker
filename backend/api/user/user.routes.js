@@ -1,12 +1,12 @@
 const express = require('express')
 const router = express.Router()
 // const { requireAuth, requireAdmin } = require('../../middlewares/requireAuth.middleware')
-const { insertUser, addUserToTable, getUser, getUsers, updateUser } = require('./user.controller')
+const { insertUser, getUser, addUserToTable, getUsers, updateUser } = require('./user.controller')
 
 // middleware that is specific to this router
 // router.use(requireAuth)
 
-router.get('/:id/join/:tableId', addUserToTable)
+// router.get('/:id/join/:tableId', addUserToTable)
 router.post('/', insertUser)
 router.get('/:id', getUser)
 // router.get('/', getUsers)

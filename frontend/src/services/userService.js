@@ -11,7 +11,6 @@ export default {
     query,
     add,
     getById,
-    joinTable,
     // update,
     // remove,
     // save
@@ -24,14 +23,9 @@ async function query() {
 
 function add(userCred) {
     console.log('userService: (ADD)', userCred)
-    // const tt = { ...userCred }
     return httpService.post(`user/`, userCred)
 }
 
 function getById(userId) {
     return httpService.get(`user/${userId}`)
-}
-
-function joinTable(userId, tableId) {
-    return httpService.get(`user/${userId}/join/${tableId}`)
 }

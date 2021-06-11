@@ -12,6 +12,7 @@ export default {
     update,
     getById,
     newRound,
+    joinTable,
     // join
     //     remove,
     //     save
@@ -39,6 +40,10 @@ function newRound(tableId) {
 
 function update(table) {
     return httpService.put(`table/${table._id}`, table)
+}
+
+function joinTable(tableId, userId) {
+    return httpService.get(`table/${tableId}/join/${userId}`)
 }
 
 // function join(tableId) {
