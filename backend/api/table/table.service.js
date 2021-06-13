@@ -89,84 +89,61 @@ async function getById(tableId) {
 }
 
 async function setNewTable(table) {
-    // table.owner.hand = [] //I handle it in user service insert (make sure it not break something)
-    console.log('table.owner', table.owner.fullname);
-    // table.owner = await addOwnerToUsersDB(table.owner)
-    // if (table.owner) return false
     table.createdAt = Date.now()
     table.players = []
-    console.log('table.ownerrr1111111111111', table.owner);
-    // const ownerSpread = { ...table.owner }
-    // console.log('tttttttttttttttt', tt);
-    // table.players.push(ownerSpread)
-    // console.log('11111111111111', table);
-    // console.log(ttt);
-    //create a players array
-    // var players = new Array(table.numOfPlayers)
-    // delete table.numOfPlayers
-    // for (let i = 0; i < players.length; i++) {
-    //     players[i] = playerService.newPlayer();
-    // }
-    // table = { ...table, players }
-    // console.log('tableeeeeeeeeeeeeeeeeeee', table);
-
-    // const tableee = newRound(table)
     return table
 }
 
-async function addOwnerToUsersDB(owner) {
-    var newOwner = { ...owner }
-    console.log('newOwner:::', newOwner);
-    newOwner = await userService.insert(newOwner, true)
-    console.log('newOwnerrrrrrrrrrrrrrrrrr', newOwner);
-    return newOwner
+async function addUserToTable(tableId, userId) {
+    try {
+        // console.log('UserToTable (table.service):');
+        // console.log('----------------------------');
+        const table = await getById(tableId)
+        const user = await userService.getById(userId)
+        table.players.push(user)
+        //now I need to update the table in the DB
+        update(table)
+        return true
+    } catch (err) {
+        logger.error(`while finding table ${tableId}`, err)
+        throw err
+    }
 }
 
 async function newRound(tableId) {
     console.log('newRound:(table.service):');
     const table = await getById(tableId)
+
+    //Prepare dealer
+    const tableAfterPrepareDealer = await prepareDealer(table)
+
     //Get a deck
     // console.log('NEW ROUND. 111: table', table);
-    table.deck = await deckService.getNewDeck()
+    tableAfterPrepareDealer.deck = await deckService.getNewDeck()
 
-    // console.log('NEW ROUND. 1111111111111111111111');
-    // console.log('-------------------------------');
-    // console.log('-------------------------------');
-    // console.log('AFTER GET DECK', table);
-    // console.log('-------------------------------');
-    // console.log('-------------------------------');
     //Deal Deck
-    const table1 = await dealDeck(table)
-    // console.log('88888888888888888888888888888888');
-    // console.log('88888888888888888888888888888888');
-    // console.log('AFTER DEAL DECK', table1);
-    // console.log('-------------------------------');
-    // console.log('-------------------------------');
+    const table1 = await dealDeck(tableAfterPrepareDealer)
 
     //Update the USERS_DB with the hands
     const tt = { ...table1 }
-
     updateUserDbHands(tt)
-    // console.log(gg);
-
 
     //Prepare flop
     const tableReady = prepareFlop(table1)
     delete tableReady.deck
-    console.log('NEW ROUND. 2222222222222222222222');
-    console.log('table:', tableReady);
 
     const tableAfterUpdateDB = await update(tableReady)
-    // console.log('table After EVERYTHING:', tableReady);
-    // tableReady = prepareCards(tableReady)
-    // await (tableReady);
-    // const tableAdded = await add(tableReady)
-    // console.log('tableAdded:', tableAdded);
-    // console.log('tableReadyyyyyyyyyyyyyyyyyyyy', tableReady);
 
-    // return tableAfterUpdateDB.flop
     return tableAfterUpdateDB
-    //send to the backend and then to the database
+}
+
+async function prepareDealer(table) {
+    var {players} = table
+    var player = players.shift()
+    players.push(player)
+    table.players = players
+    const tableAfterUpdate = await update(table)
+    return tableAfterUpdate
 }
 
 function dealDeck(table) {
@@ -175,74 +152,34 @@ function dealDeck(table) {
         table.players[i].hand = []
     }
     console.log('----------DEAL DECK----------');
-    console.log('******Table player length:', table.players.length);
     const loops = table.mode === 'poker' ? 2 : 4;
     for (let i = 0; i < loops; i++) {
         for (let j = 0; j < table.players.length; j++) {
-            // console.log('1--------1', table.players[j]);
-            // table.players[j].hand = 0
-            // console.log('2--------2', table.players[j]);
             var tempCard = table.deck.shift()
-            // console.log('tempCard', tempCard);
             table.players[j].hand.push(tempCard)
         }
     }
-    console.log('4--------4');
-    console.log('TABLEEEEEEEEEEE Before return:', table);
+    console.log('TABLE Before return:', table);
     return table
 }
 
 async function updateUserDbHands(table) {
     try {
-        console.log('dsdsdsdsdsdsdsdsdsdsdsdsdsdsss');
-        console.log('dsdsdsdsdsdsdsdsdsdsdsdsdsdsss');
-        console.log('dsdsdsdsdsdsdsdsdsdsdsdsdsdsss');
-        // console.log('dsdsdsdsdsdsdsdsdsdsdsdsdsdsss');
-        // console.log('table', table);
-        // var userId = table.players[0]._id
-        // console.log('userId::::::::', userId);
-        // var tempUser = await userService.getById(userId)
-        // console.log('tempUser::::::::', tempUser);
-        // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-        // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-        // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-        // console.log('table.players:', table.players[0]._id);
-        // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-        // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-        // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-        // var playersHands = []
-        // var tempHand = null
         for (var i = 0; i < table.players.length; i++) {
-            console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-            console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
             var userId = table.players[i]._id
             var tempUser = await userService.getById(userId)
             tempUser.hand = table.players[i].hand
-            console.log('00000000000000000000000000');
-            console.log(tempUser);
-            console.log('00000000000000000000000000');
-            var userAfterUpdate = await userService.update(tempUser)
-            console.log('userAfterUpdate:', userAfterUpdate);
+            await userService.update(tempUser)
+            // var userAfterUpdate = await userService.update(tempUser)
+            // console.log('userAfterUpdate:', userAfterUpdate);
             // playersHands.push(tempHand)
         }
-
-        // console.log('00000000000000000000000000');
-        // console.log('00000000000000000000000000');
-        // console.log('00000000000000000000000000');
-        // console.log(playersHands);
-        // console.log('00000000000000000000000000');
-        // console.log('00000000000000000000000000');
-        // console.log('00000000000000000000000000');
-
     } catch (err) {
         logger.error(`while Updating user Hands ${tableId}`, err)
         throw err
     }
-
-
 }
 
-//prepare flop after getting a table with a deck
 function prepareFlop(table) {
 
     const flop = []
@@ -266,22 +203,6 @@ function prepareFlop(table) {
     table = { ...table, flop }
 
     return table
-}
-
-async function addUserToTable(tableId, userId) {
-    try {
-        // console.log('UserToTable (table.service):');
-        // console.log('----------------------------');
-        const table = await getById(tableId)
-        const user = await userService.getById(userId)
-        table.players.push(user)
-        //now I need to update the table in the DB
-        update(table)
-        return true
-    } catch (err) {
-        logger.error(`while finding table ${tableId}`, err)
-        throw err
-    }
 }
 
 

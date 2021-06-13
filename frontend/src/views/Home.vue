@@ -1,5 +1,6 @@
 <template>
   <div>
+    <app-header></app-header>
     <section v-show="showSection" class="modal">
       <br /><br />
       <h1>Welcome!</h1>
@@ -24,6 +25,7 @@
 import ActiveTables from '@/cmps/ActiveTables'
 import NewTable from '@/cmps/NewTable'
 import tableService from '@/services/tableService.js'
+import AppHeader from '@/cmps/AppHeader'
 
 export default {
     data() {
@@ -65,6 +67,7 @@ export default {
     components: {
         ActiveTables,
         NewTable,
+        AppHeader
     },
 };
 </script>

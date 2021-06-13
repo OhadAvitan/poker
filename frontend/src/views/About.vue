@@ -1,5 +1,6 @@
 <template>
   <div class="about">
+    <app-header></app-header>
     <h2>The KING player</h2>
     <h2>and the developer:</h2>
     <h1>Paranoya</h1>
@@ -14,12 +15,16 @@
 </template>
 
 <script>
+import AppHeader from '@/cmps/AppHeader'
 export default {
   data() {
     return {
       bgImgSrc: require('@/assets/imgs/pokerback.png'),
       bgImgSrc1: require('@/assets/imgs/chips.jpg')
     }
+  },
+  components:{
+    AppHeader
   }
 }
 </script>

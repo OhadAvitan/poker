@@ -18,7 +18,15 @@
       <div></div>
       <div></div>
     </div>
-    <h3 v-else>Players connected:{{ this.table.players.length }}</h3>
+    <p v-else class="leader-name">Leader: {{ this.table.players[0].fullname }}</p>
+    <div v-if="!table" class="lds-ellipsis">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <p v-else class="players-connected">Players connected: {{ this.table.players.length }}</p>
+    
     <!-- <section>
       <div class="lds-ellipsis">
         <div></div>
@@ -41,10 +49,10 @@
           :style="'color: ' + cardColor(card)"
           :class="`card-table pos` + (index + 1)"
         >
-          <div :hidden="!card.isShown">
+          <div :hidden="!card.isShown" class="">
             <p>{{ card.num }}</p>
-            <p>{{ card.suit }}</p>
-            <h3>{{ card.suit }}</h3>
+            <!-- <p>{{ card.suit }}</p> -->
+            <h3 :class="`${card.suit}`">{{ card.suit }}</h3>
           </div>
         </div>
       </div>
@@ -87,6 +95,7 @@ export default {
     async newRound() {
       // console.log('this.table._id:(Table):',this.table._id);
       const tableWithNewRound = await tableService.newRound(this.table._id)
+      this.table = tableWithNewRound 
       this.flop = tableWithNewRound.flop
       console.log('PPPPPPPPPPPPPPPPPPPPPPPPP',tableWithNewRound);
     },
